@@ -11,7 +11,7 @@ export default function Introduction() {
     ]
 
     return (
-        <section className="h-screen flex flex-col items-center justify-center text-4xl text-[#f3f3f3] text-justify w-[50%] mx-auto">
+        <section className="h-screen flex flex-col items-center justify-center text-2xl sm:text-3xl md:text-4xl text-[#f3f3f3] text-justify w-full max-w-2xl px-4 mx-auto">
             <motion.div
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}

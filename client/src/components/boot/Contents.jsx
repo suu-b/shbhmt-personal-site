@@ -73,21 +73,21 @@ export default function Contents() {
     ];
 
     return (
-        <section className="flex flex-col items-center justify-center w-[50%] mx-auto mt-12">
+        <section className="flex flex-col items-center justify-center w-full max-w-2xl px-4 mx-auto mt-12">
             <p className="text-xl font-light text-justify mb-5">{introText1}</p>
             <p className="text-xl font-light text-justify mb-5">{introText2}</p>
             <p className="text-xl font-light text-justify mb-5">{introText3}</p>
             <Poem />
-            <img src={border} alt="border" className="w-[40%] my-5" />
+            <img src={border} alt="border" className="w-full max-w-xs sm:max-w-sm md:max-w-md lg:max-w-lg my-5" />
             <p className="text-xl font-light text-justify mb-5">
                 {interestText}
             </p>
-            <div className="flex flex-wrap justify-center gap-5 mt-5 mb-8">
+            <div className="flex flex-wrap justify-center gap-4 sm:gap-5 mt-5 mb-8 w-full">
                 {cards.map((card, index) => (
                     <Link
                         to={`/${card.title.toLowerCase().replace(" ", "-")}`}
                         key={index}
-                        className="p-5 w-[250px] h-[200px] bg-black rounded-lg hover:shadow-xl text-left cursor-pointer"
+                        className="p-4 w-full max-w-xs h-[200px] bg-black rounded-lg hover:shadow-xl text-left cursor-pointer"
                     >
                         <h3 className="text-xl font-semibold text-slate-300">
                             {card.title}

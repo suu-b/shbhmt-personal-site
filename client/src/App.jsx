@@ -25,9 +25,14 @@ export default function App() {
     setTimeout(() => setLoading(false), 5000)
   }, [])
 
+
+
   return (
-    <div className="min-h-screen min-w-screen flex flex-col items-center text-xl justify-center bg-[#101010] relative text-slate-300">
-      {!loading ?
+    <div className="min-h-screen w-full flex flex-col items-center text-base sm:text-lg md:text-xl justify-center bg-[#101010] relative text-slate-300 px-2 sm:px-4"> 
+      <h1 className="text-4xl">Under Maintenance 🚧  </h1>
+      <p>Will be up in a week</p>
+
+      {/* {!loading ?
         <>
           <button
             onClick={() => setIsNavOpen(true)}
@@ -49,11 +54,11 @@ export default function App() {
             <Route path="/artificial-intelligence" element={< ArtificialIntelligence/>} />
             <Route path="*" element={<NotFound/>}/>
           </Routes>
-          {<img src={border} alt="border" className="w-[20%] my-5" />}
+          {<img src={border} alt="border" className="w-full max-w-xs sm:max-w-sm md:max-w-md lg:max-w-lg my-5" />}
           <Contact/>
         </>
         :
-        <Loader />}
+        <Loader />} */}
 
     </div>
   )

@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 
 export default function NotFound() {
     return (
-        <section id="not-found" className="w-[50%] text-center">
+        <section id="not-found" className="w-full max-w-2xl px-4 text-base sm:text-lg text-center mx-auto">
             <h1 className="text-4xl text-center mb-0">404 Not Found</h1>
             <div id="content">
                 <p className="text-slate-300 text-lg mt-5 mb-8 text-center">

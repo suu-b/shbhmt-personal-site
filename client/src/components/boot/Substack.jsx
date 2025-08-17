@@ -22,9 +22,9 @@ export default function Substack() {
   return (
     <section
       id="substack-section"
-      className="flex flex-col items-center justify-center w-full md:w-[50%] mx-auto mt-16"
+      className="flex flex-col items-center justify-center w-full max-w-2xl px-4 mx-auto mt-16"
     >
-      <img src={border} alt="border" className="w-[40%] mb-6" />
+      <img src={border} alt="border" className="w-full max-w-xs sm:max-w-sm md:max-w-md lg:max-w-lg mb-6" />
 
       {substackArticles ? (
         <div className="w-full">

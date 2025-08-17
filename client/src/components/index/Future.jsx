@@ -1,6 +1,6 @@
 export default function Future() {
     return (
-        <section id="timeline" className="w-[50%] pt-10">
+        <section id="timeline" className="w-full max-w-2xl px-4 pt-10 mx-auto">
             <h1 className="text-4xl text-center mb-0">Timeline</h1>
             <div id="content">
                 <p className="text-slate-300 text-lg  mt-5 mb-8 text-justify">

@@ -6,11 +6,11 @@ export default function Loader() {
     const quoteCredit = "~ Bernard of Chartres [later popularized by Newton]"
 
     return (
-        <div className="absolute inset-0 flex flex-col items-center justify-center p-24">
+        <div className="absolute inset-0 flex flex-col items-center justify-center w-full max-w-2xl px-4 py-8 mx-auto">
             <div className="absolute inset-0 bg-opacity-70" />
             <div className="relative text-center text-slate-300">
                 <motion.p
-                    className="text-3xl leading-snug"
+                    className="text-xl sm:text-2xl md:text-3xl leading-snug"
                     initial={{ opacity: 0, x: -50 }}
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ duration: 1 }}
@@ -18,7 +18,7 @@ export default function Loader() {
                     {quote}
                 </motion.p>
                 <motion.p
-                    className="text-lg font-light mt-4"
+                    className="text-base sm:text-lg font-light mt-4"
                     initial={{ opacity: 0, x: -50 }}
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ delay: 1.5, duration: 1 }}
