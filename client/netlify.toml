@@ -1,12 +1,3 @@
-[functions]
-directory = "netlify/functions"
-
-[[redirects]]
-  from = "/substack"
-  to = "/.netlify/functions/fetchArticles"
-  status = 200
-  force = true
-
 [[redirects]]
   from = "/*"
   to = "/index.html"

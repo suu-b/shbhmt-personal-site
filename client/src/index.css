@@ -16,3 +16,26 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+hr {
+  border: none;
+  height: 1px;
+  background: #9CA3AF;
+  margin: 2rem 0;
+  opacity: 0.6;
+}
+
+hr.solid {
+  background: #9CA3AF;
+  opacity: 0.8;
+}
+
+hr.dashed {
+  background: repeating-linear-gradient(
+    to right,
+    #9CA3AF 0,
+    #9CA3AF 8px,
+    transparent 8px,
+    transparent 16px
+  );
+}

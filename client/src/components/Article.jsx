@@ -1,5 +1,8 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router"
+import { marked } from 'marked'
+import DOMPurify from 'dompurify'
+
 import getArticle from "../util/getArticle";
 import formatDate from "../util/convertDate";
 
@@ -25,7 +28,7 @@ export default function Article(){
                 <p className="mx-2 font-light text-base tracking-wide">|</p>
                 <p className= "font-light text-base tracking-wide bg-[#9CA3AF] rounded px-2 text-[#101010] bg-opacity-70">{contentType}</p>
             </div>
-            {articleContent && <p className="font-light text-justify mt-5 leading-relaxed">{articleContent}</p>}
+            {articleContent && <div className="font-light text-justify mt-5 leading-relaxed" dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(marked.parse(articleContent, { gfm: true, breaks: true })) }} />}
         </section>
     )
 }
