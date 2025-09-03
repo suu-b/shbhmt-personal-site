@@ -1,1 +1,0 @@
-Once a pokemon came flying to me which was like a beautiful butterfly, i decided to call it 'Beautiful'. Later, I came to know that indeed her actual name was 'Beautifly'.
