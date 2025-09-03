@@ -6,7 +6,7 @@ export default function Loader() {
     const quoteCredit = "~ Bernard of Chartres [later popularized by Newton]"
 
     return (
-        <div className="absolute inset-0 flex flex-col items-center justify-center w-full max-w-2xl px-4 py-8 mx-auto">
+        <div className="bg-[#101010] absolute inset-0 flex flex-col items-center justify-center w-full max-w-1/2 px-4 py-8 mx-auto">
             <div className="absolute inset-0 bg-opacity-70" />
             <div className="relative text-center text-slate-300">
                 <motion.p
