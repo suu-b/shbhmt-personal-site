@@ -18,7 +18,7 @@ export default async function getArticleList(slug) {
     
     const headers = lines[0].split(',').map(h => h.trim());
     
-    const expectedHeaders = ['date', 'title', 'description'];
+    const expectedHeaders = ['date', 'title', 'description', 'thumbnail', 'credits'];
     const hasValidHeaders = expectedHeaders.every(header => headers.includes(header));
     
     if (!hasValidHeaders) {

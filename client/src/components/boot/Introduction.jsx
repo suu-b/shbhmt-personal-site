@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useState, useEffect } from "react"
 import { motion } from "framer-motion"
 import { FaArrowDown } from "react-icons/fa"
 
@@ -7,6 +7,8 @@ import { Anchor } from "../Anchor"
 import logo from "/assets/tagore_hero.png"
 
 export default function Introduction() {
+    const [imageLoaded, setImageLoaded] = useState(false);
+    
     const texts = [
         { text: "Hey, I'm Shubham!", element: "h1", className: "text-xl text-slate-400" },
         { text: "As of Spring 2025, I am a CS student.", element: "p", className: "text-xl text-slate-400" },
@@ -23,6 +25,12 @@ export default function Introduction() {
         }
     ]
 
+    useEffect(() => {
+        const img = new Image();
+        img.onload = () => setImageLoaded(true);
+        img.src = logo;
+    }, []);
+
     return (
         <section className="h-screen flex flex-col items-center justify-center text-2xl sm:text-3xl md:text-4xl text-[#f3f3f3] text-justify w-full max-w-[50vw] px-4 mx-auto">
             <motion.a
@@ -30,13 +38,13 @@ export default function Introduction() {
               target="_blank"
               rel="noopener noreferrer"
               whileHover={{ scale: 1.05 }}
-              className="block mx-auto mb-5 w-fit"
+              className="block mx-auto mb-5 w-fit h-28 flex items-center justify-center"
             >
                 <motion.img
                     initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
+                    animate={{ opacity: imageLoaded ? 1 : 0, y: 0 }}
                     transition={{ delay: 2, duration: 1, ease: "easeOut" }}
-                    className="mx-auto w-28 rounded-xl shadow-lg"
+                    className="mx-auto w-28 h-28 rounded-xl shadow-lg object-cover"
                     src={logo}
                     alt="Rabindra Nath Tagore - Indian Polymath"
                 />

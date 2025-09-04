@@ -1,1 +1,0 @@
-This is a test article to test if the github workflow triggers once the file is pushed by otto on main or not. let's see.
