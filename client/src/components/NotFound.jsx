@@ -11,7 +11,6 @@ export default function NotFound() {
             </div>
             <div className="flex justify-center mt-5 mb-8 gap-4">
                 <Link to="/" className="bg-gray-400 text-slate-900 rounded p-2">Go to Homepage</Link>
-                <Link to="/future" className="bg-gray-400 text-slate-900 rounded p-2">Check future pages</Link>
             </div>
         </section>
     )

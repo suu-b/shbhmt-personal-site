@@ -45,8 +45,8 @@ export default function Content(){
                             credits: card.credits
                         }}
                     >
-                    <div className="card p-5 my-3 border border-slate-400 border-1 rounded-lg hover:cursor-pointer hover:bg-[#0F0E0E] hover:text-white transition-all duration-300 ease-in-out">
-                        <h3 className="mb-3 text-lg font-semibold">{card.title}</h3>
+                    <div className="card p-5 my-3 border border-slate-400 border-1 rounded-lg hover:cursor-pointer hover:shadow-lg hover:bg-[#0F0E0E] transition-all duration-300 ease-in-out">
+                        <h3 className="hover:text-[#C4C4C4]  mb-1 text-2xl font-semibold">{card.title}</h3>
                         <p className="text-base mb-2">{card.description}</p>
                         <p className="text-sm text-slate-500">{card.date}</p>
                     </div>
