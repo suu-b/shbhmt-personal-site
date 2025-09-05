@@ -32,7 +32,7 @@ export default function Introduction() {
     return (
         <section className="h-screen flex flex-col items-center justify-center text-2xl sm:text-3xl md:text-4xl text-[#f3f3f3] text-justify w-full max-w-[50vw] px-4 mx-auto">
             <motion.a
-              href="https://en.wikipedia.org/wiki/Vitruvian_Man"
+              href="https://chatgpt.com/share/68b9801d-52b0-8012-ab58-883060e3b617"
               target="_blank"
               rel="noopener noreferrer"
               whileHover={{ scale: 1.05 }}

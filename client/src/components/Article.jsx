@@ -13,11 +13,10 @@ export default function Article(){
 
     const params = useParams();
     const location = useLocation();
-    const title = params.title;
     const date = params.date;
     const contentType = params.contentType;
     
-    const { description, thumbnail, credits } = location.state || {};
+    const { title, description, thumbnail, credits } = location.state || {};
 
     useEffect(() => {
         setLoading(true);
@@ -28,7 +27,7 @@ export default function Article(){
     }, [title, date, contentType])
 
     return(
-        <section className="py-10">
+        <section className="article py-10">
             <h1 className="text-5xl mt-20 ">{title}</h1>
             
             {description && (

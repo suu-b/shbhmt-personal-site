@@ -3,6 +3,7 @@ import { getDataFromContentType } from "../util/getDataFromContentType";
 import getArticleList from "../util/getArticleList";
 import { useEffect, useState } from "react";
 import { PulseLoader } from "react-spinners";
+import slugify from "../util/slugifyTitle";
 
 export default function Content(){
     const [cardsData, setCardsData] = useState(null);
@@ -38,8 +39,9 @@ export default function Content(){
                 ) : cardsData && cardsData.map((card, index) => (
                     <Link 
                         key={index} 
-                        to={`/article/${contentType}/${card.date}/${card.title}`}
+                        to={`/article/${contentType}/${card.date}/${slugify(card.title)}`}
                         state={{ 
+                            title: card.title,
                             description: card.description,
                             thumbnail: card.thumbnail,
                             credits: card.credits

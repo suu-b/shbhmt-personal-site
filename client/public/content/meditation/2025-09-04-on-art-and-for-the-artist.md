@@ -4,7 +4,7 @@ Was I not also a listener?_
 
 <br/>
 
-This excerpt from Gibran’s The Prophet pretty much summarizes all the ranting I am going to do here.  
+This excerpt from [Gibran’s](https://en.wikipedia.org/wiki/Kahlil_Gibran) [The Prophet](https://www.goodreads.com/book/show/2547.The_Prophet) pretty much summarizes all the ranting I am going to do here.  
 Nevertheless, I often spend some proportion of my time writing poems. Lately, I’ve been sending them off to an array of journals. Consequently, I’ve been receiving an array of rejections too. Today, this whole sequence pushed me into a trance. Though it was not the infamous imposter syndrome, I realize that I genuinely find poetry worth pursuing. Expressing my deepest feelings in words is a fascinating idea. It is art.  
 I decided to turn inwards and ask — ‘Is my poetry truly art?’  
 What art is? I asked.<br/>
