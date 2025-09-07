@@ -1,0 +1,1 @@
+Checking if it follows only one commit
