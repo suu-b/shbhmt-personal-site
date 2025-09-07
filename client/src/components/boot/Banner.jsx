@@ -4,13 +4,16 @@ import { Link } from "react-router"
 
 import slugify from "../../util/slugifyTitle"
 import formatDate from "../../util/convertDate"
+import capitalizeFirst from "../../util/capitalizeFirst"
 
 
 export default function Banner() {
-    const title = "On Art and for the Artist";
-    const thumbnail = "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2F1.bp.blogspot.com%2F-Ij63pIkCbTs%2FX7WZfJKpkdI%2FAAAAAAAG4K0%2Fbs-4HA2HRkwt-z_Zyolc6lsZ-vbbDwNpACPcBGAsYHg%2Fs16000%2FVincent-van-Gogh-The-Starry-Night-Saint-Remy-June-1889-MoMa-detail.jpg&f=1&nofb=1&ipt=9336ef758a54a129bd7eb88885a1726d709161b672b7df197b288b9d7ef104f4";
-    const alt = "Van Gogh's The Starry Night 1889 - The painting I had in my mind while writing this essay";
-    const desc = "My meditation on art and a condolence to myself for yet another rejection from a journal";    
+    const title = "On building a Personal Site";
+    const thumbnail = "https://upload.wikimedia.org/wikipedia/commons/b/b1/Caillebotte_-_Portrait_of_a_Man_Writing_in_His_Study%2C_1885.jpg";
+    const alt ="Caillebotte - Portrait of a Man Writing in His Study 1885 from WikiMedia Commons";
+    const desc = "A Confession and a Justification on building this site";
+    const date = "2025-09-07";
+    const category = "journal";
     const credits = alt;
    
     return (
@@ -36,20 +39,19 @@ export default function Banner() {
                 </div>
             </motion.div>
             <div className="space-y-2">
-                <h2 className="text-3xl text-slate-400">
-                </h2>
+                <h2 className="text-3xl text-slate-400">{title}</h2>
                 
                 <p className="text-base text-slate-400 leading-relaxed font-light">{desc}</p>
                 
                 <div className="flex items-center space-x-4 text-sm text-slate-500">
-                    <span className="font-light">{formatDate("2025-09-04")}</span>
+                    <span className="font-light">{formatDate(date)}</span>
                     <span className="w-1 h-1 bg-slate-500 rounded-full"></span>
-                    <span className="font-light">journal</span>
+                    <span className="font-light">{capitalizeFirst(category)}</span>
                 </div>
 
                 <div className="pt-3 flex justify-end">
                     <Link 
-                        to={`/article/meditation/2025-09-04/${slugify(title)}`}
+                        to={`/article/${category}/${date}/${slugify(title)}`}
                         state={{ title: title, description: desc, thumbnail,credits }}
                     >
                         <motion.button

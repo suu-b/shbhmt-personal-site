@@ -49,3 +49,10 @@ hr.dashed {
   color: inherit;
   transition: color 0.3s ease;
 }
+
+.article h3 {
+  margin-top: 20px;
+  margin-bottom: 0;
+  letter-spacing: 0.025em;
+  font-size: larger;
+}
