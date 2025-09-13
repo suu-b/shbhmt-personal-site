@@ -17,6 +17,7 @@ export default function Article(){
     const contentType = params.contentType;
     
     const { title, description, thumbnail, credits } = location.state || {};
+    console.log(thumbnail);
 
     useEffect(() => {
         setLoading(true);

@@ -56,3 +56,27 @@ hr.dashed {
   letter-spacing: 0.025em;
   font-size: larger;
 }
+
+pre {
+  background-color: #1a1a1a;
+  /* slightly lighter than body */
+  color: #e5e5e5;
+  /* soft white */
+  padding: 1rem;
+  border-radius: 0.5rem;
+  overflow-x: auto;
+  margin: 1.5rem 0;
+  font-family: "Fira Code", "Courier New", monospace;
+  font-size: 0.95rem;
+  line-height: 1.5;
+  border: 1px solid #2f2f2f;
+}
+
+/* Inline code */
+code {
+  color: #f5f5f5;
+  padding: 0.2em 0.4em;
+  border-radius: 0.3em;
+  font-family: "Fira Code", "Courier New", monospace;
+  font-size: 0.9em;
+}
