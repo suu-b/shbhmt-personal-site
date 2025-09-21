@@ -21,8 +21,28 @@ export default function Content(){
 
     return(
         <section className="py-10">
-            <h1 className="text-5xl mt-20">{contentData?.title}</h1>
+            {contentData?.banner && (
+            <a 
+                 href={contentData.src} 
+                target="_blank" 
+                rel="noopener noreferrer"
+            >
+            <div 
+                className="w-full h-64 md:h-80 lg:h-96 overflow-hidden relative rounded-lg grayscale"
+                style={{
+                 backgroundImage: `url(${contentData.banner})`,
+                 backgroundSize: "cover",
+                 backgroundPosition: "center",
+                }}
+            >
+                <div className="absolute inset-0 bg-black/40"></div>
+            </div>
+            </a>
+            )}
+            <h1 className="text-5xl mt-10">{contentData?.title}</h1>
             <p className="my-2">{contentData?.description}</p>
+
+
             <div className="mt-10">
                 {loading ? (
                     <div className="flex justify-center items-center py-20">

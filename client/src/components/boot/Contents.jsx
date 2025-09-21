@@ -1,6 +1,5 @@
 import React from "react";
 import { Anchor } from "../Anchor";
-import x from "../../../public/assets/mai_na_bhoolunga_hero.jpg"
 
 export default function Contents() {
     return (

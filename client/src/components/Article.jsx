@@ -17,7 +17,6 @@ export default function Article() {
   const contentType = params.contentType;
 
   const { title, description, thumbnail, credits } = location.state || {};
-  console.log(thumbnail);
 
   useEffect(() => {
     setLoading(true);
@@ -26,6 +25,13 @@ export default function Article() {
       setLoading(false);
     });
   }, [title, date, contentType]);
+
+  useEffect(() => {
+    if (!loading && window.MathJax) {
+      window.MathJax.typesetPromise();
+    }
+  }, [loading, articleContent]);
+
 
   let cleanHTML = null;
   if (articleContent) {

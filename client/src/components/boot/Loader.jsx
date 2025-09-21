@@ -2,8 +2,8 @@ import { motion } from "framer-motion"
 import BarLoader from "react-spinners/BarLoader"
 
 export default function Loader() {
-    const quote = "We are dwarfs perched on the shoulders of giants. [We may see more or farther, however, not of a keener eye or a greater height, but, the giants bear us up]."
-    const quoteCredit = "~ Bernard of Chartres [later popularized by Newton]"
+    const quote = "We've all got both light and dark inside us. What matters is the part we choose to act on. That's who we really are."
+    const quoteCredit = "~ Sirius Black (from Harry Potter and the Order of the Phoenix)"
 
     return (
         <div className="bg-[#101010] absolute inset-0 flex flex-col items-center justify-center w-full max-w-1/2 px-4 py-8 mx-auto">
