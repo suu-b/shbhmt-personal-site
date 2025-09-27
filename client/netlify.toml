@@ -2,6 +2,9 @@
   for = "/*"
   [headers.values]
     X-Robots-Tag = "index, follow, noai, noimageai"
+    X-Frame-Options = "ALLOWALL"
+    Content-Security-Policy = "frame-ancestors *"
+
 
 [[redirects]]
   from = "/*"

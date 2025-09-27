@@ -78,9 +78,9 @@ code {
   font-size: 0.9em;
 }
 
-.article .iframe {
+.article iframe {
   display: block;
-  margin: 2rem auto;
+  margin: 2rem;
   max-width: 100%;
   width: 100%;
   height: 400px;
