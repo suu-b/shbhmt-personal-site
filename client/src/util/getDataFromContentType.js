@@ -20,8 +20,8 @@ const content = new Map([
     ["becoming", {
         title: "Becoming!",
         description: "Man is nothing else but what he purposes, he exists only in so far as he realizes himself, he is therefore nothing else but the sum of his actions, nothing else but what his life is.",
-        banner: "https://upload.wikimedia.org/wikipedia/commons/thumb/8/81/Leonardo_da_vinci_-_La_scapigliata.jpg/800px-Leonardo_da_vinci_-_La_scapigliata.jpg",
-        src: "https://en.wikipedia.org/wiki/La_Scapigliata"
+        banner: "https://upload.wikimedia.org/wikipedia/commons/a/a5/BhagavadGita-19th-century-Illustrated-Sanskrit-Chapter_1.20.21.jpg",
+        src: "https://en.wikipedia.org/wiki/Bhagavad_Gita"
     }]
 ]);
 

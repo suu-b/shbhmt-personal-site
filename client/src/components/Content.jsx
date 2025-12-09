@@ -4,6 +4,7 @@ import getArticleList from "../util/getArticleList";
 import { useEffect, useState } from "react";
 import { PulseLoader } from "react-spinners";
 import slugify from "../util/slugifyTitle";
+import formatDate from "../util/convertDate";
 
 export default function Content() {
   const [cardsData, setCardsData] = useState(null);
@@ -13,7 +14,7 @@ export default function Content() {
 
   useEffect(() => {
     setLoading(true);
-    getArticleList(contentType).then(cd => {
+    getArticleList(contentType).then((cd) => {
       const sortedCd = [...cd].sort((a, b) => {
         const dateA = new Date(a.date);
         const dateB = new Date(b.date);
@@ -27,11 +28,7 @@ export default function Content() {
   return (
     <section className="py-10">
       {contentData?.banner && (
-        <a
-          href={contentData.src}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
+        <a href={contentData.src} target="_blank" rel="noopener noreferrer">
           <div
             className="w-full h-64 md:h-80 lg:h-96 overflow-hidden relative rounded-lg grayscale"
             style={{
@@ -72,12 +69,21 @@ export default function Content() {
                 credits: card.credits,
               }}
             >
-              <div className="card p-5 my-3 border border-slate-400 border-1 rounded-lg hover:cursor-pointer hover:shadow-lg hover:bg-[#0F0E0E] transition-all duration-300 ease-in-out">
-                <h3 className="hover:text-[#C4C4C4] mb-1 text-2xl font-semibold">
+              <div
+                className={`card py-8 hover:cursor-pointer transition-all duration-300 ease-in-out ${
+                  index < cardsData.length - 1 &&
+                  "border border-l-0 border-t-0 border-r-0 border-slate-700 border-1"
+                }`}
+              >
+                <h3 className="text-slate-400 mb-1 text-2xl font-semibold">
                   {card.title}
                 </h3>
-                <p className="text-base mb-2">{card.description}</p>
-                <p className="text-sm text-slate-500">{card.date}</p>
+                <p className="text-lg text-slate-500 mb-2">
+                  {card.description}
+                </p>
+                <p className="text-sm text-slate-500">
+                  {formatDate(card.date)}
+                </p>
               </div>
             </Link>
           ))
