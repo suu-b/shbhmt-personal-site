@@ -55,6 +55,7 @@ hr.dashed {
   margin-bottom: 0;
   letter-spacing: 0.025em;
   font-size: larger;
+  font-weight: 900;
 }
 
 pre {
@@ -87,4 +88,8 @@ code {
   border: none;
   border-radius: 0.75rem;
   box-shadow: 0 6px 18px rgba(0, 0, 0, 0.5);
+}
+
+.tight-br {
+  margin-top: 0px;
 }

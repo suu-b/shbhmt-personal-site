@@ -32,22 +32,30 @@ export default function Article() {
     }
   }, [loading, articleContent]);
 
-
   let cleanHTML = null;
   if (articleContent) {
+    const renderer = {
+      br() {
+        return '<p class="tight-br"></p>';
+      },
+    };
+
+    marked.use({ renderer });
     const dirty = marked.parse(articleContent, { gfm: true, breaks: true });
 
     cleanHTML = DOMPurify.sanitize(dirty, {
-      ADD_TAGS: ["iframe"],
       ADD_ATTR: [
+        "href",
+        "target",
+        "rel",
         "allow",
         "allowfullscreen",
         "frameborder",
         "scrolling",
         "src",
       ],
-      ALLOWED_URI_REGEXP:
-        /^(https?:)?\/\/(www\.)?(youtube\.com|youtu\.be|player\.vimeo\.com)\//,
+      ADD_TAGS: ["iframe"],
+      ALLOWED_URI_REGEXP: /^https?:\/\//,
     });
   }
 
@@ -62,9 +70,7 @@ export default function Article() {
       )}
 
       <div className="mb-2 mt-3 flex justify-start items-center">
-        <p className="font-light text-base tracking-wide">
-          {formatDate(date)}
-        </p>
+        <p className="font-light text-base tracking-wide">{formatDate(date)}</p>
         <p className="mx-2 font-light text-base tracking-wide">|</p>
         <p className="font-light text-base tracking-wide bg-[#9CA3AF] rounded px-2 text-[#101010] bg-opacity-70">
           {contentType}
@@ -91,7 +97,7 @@ export default function Article() {
       ) : (
         cleanHTML && (
           <div
-            className="font-light text-justify mt-5 leading-relaxed"
+            className="article-content font-light text-left mt-5 leading-relaxed"
             dangerouslySetInnerHTML={{ __html: cleanHTML }}
           />
         )
