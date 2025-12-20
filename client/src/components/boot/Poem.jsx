@@ -26,7 +26,7 @@ export default function Poem() {
             className="rounded-full h-[300px] w-[300px] mx-auto my-auto mt-8"
           />
           <a
-            href="https://www.poetryfoundation.org/poems/42889/hope-is-the-thing-with-feathers-314"
+            href="https://youtu.be/g5wEqF7NtcI?list=PLE2EF7yo6iH3O8a3QkUn9F8bQEYOb51sg"
             target="_blank"
             rel="noopener noreferrer"
           >
@@ -35,7 +35,7 @@ export default function Poem() {
               transition={{ duration: 0.2, ease: "easeInOut" }}
               className="w-full flex mt-5 justify-center items-center text-base px-3 py-1 border border-slate-400 border-1 rounded-lg bg-slate-400 text-[#101010]"
             >
-              Read on the Poetry Foundation <GoLinkExternal className="ml-3" />
+              Recitation by Mairin O'Hagan <GoLinkExternal className="ml-3" />
             </motion.button>
           </a>
         </div>
