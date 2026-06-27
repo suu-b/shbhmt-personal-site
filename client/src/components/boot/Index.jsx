@@ -28,21 +28,21 @@ export default function Index() {
   return (
     <section id="index" className="w-full">
       <h1 className="text-center text-2xl">My Blogs</h1>
-      <div className="flex justify-center gap-6 max-w-8xl mx-auto">
-        <Link className="my-5" to={"/content/becoming"}>
+      <div className="flex justify-center gap-6 max-w-8xl mx-auto w-full px-4 md:px-0">
+        <Link className="my-5 w-full max-w-md md:max-w-none" to={"/content/becoming"}>
           <div
-            className="w-full h-[200px] p-5 border border-slate-400 rounded-lg
+            className="w-full min-h-[200px] h-auto p-5 border border-slate-400 rounded-lg
                         hover:cursor-pointer hover:bg-[#0F0E0E]
                         hover:shadow-[0_4px_10px_#0F0E0E]
                         transition-all duration-300 ease-in-out flex flex-col"
           >
-            <div className="flex justify-center items-center">
+            <div className="flex justify-center items-center mb-4">
               <h3 className="mr-2 text-center font-bold text-slate-400">
                 Becoming!
               </h3>
               <GoLinkExternal />
             </div>
-            <p className="text-base flex-1">
+            <p className="text-base flex-1 mb-4">
               Man is nothing else but what he purposes, he exists only in so far
               as he realizes himself, he is therefore nothing else but the sum
               of his actions, nothing else but what his life is.
@@ -52,20 +52,20 @@ export default function Index() {
         </Link>
       </div>
 
-      <div className="flex justify-center gap-6 max-w-8xl mx-auto">
+      <div className="flex flex-col md:flex-row justify-center items-center gap-6 max-w-8xl mx-auto w-full px-4 md:px-0">
         {cardData.map((card, index) => (
-          <Link key={index} to={`/content/${card.contentType}`}>
+          <Link key={index} to={`/content/${card.contentType}`} className="w-full max-w-md md:w-auto">
             <div
-              className="w-[280px] h-[250px] p-5 border border-slate-400 rounded-lg
+              className="w-full md:w-[280px] min-h-[250px] h-auto p-5 border border-slate-400 rounded-lg
                         hover:cursor-pointer hover:bg-[#0F0E0E]
                         hover:shadow-[0_4px_10px_#0F0E0E]
                         transition-all duration-300 ease-in-out flex flex-col"
             >
               <div className="flex mb-5 justify-between">
                 <h3 className="mr-2 font-bold text-slate-400">{card.title}</h3>
-                <GoLinkExternal />
+                <GoLinkExternal className="flex-shrink-0" />
               </div>
-              <p className="text-base flex-1">{card.description}</p>
+              <p className="text-base flex-1 mb-4">{card.description}</p>
               <p className="text-base text-right">~ {card.quotedBy}</p>
             </div>
           </Link>

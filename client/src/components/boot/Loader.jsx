@@ -6,7 +6,7 @@ export default function Loader() {
     const quoteCredit = "~ Sirius Black (from Harry Potter and the Order of the Phoenix)"
 
     return (
-        <div className="bg-[#101010] absolute inset-0 flex flex-col items-center justify-center w-full max-w-1/2 px-4 py-8 mx-auto">
+        <div className="bg-[#101010] absolute inset-0 flex flex-col items-center justify-center w-full max-w-full md:max-w-[50vw] px-6 py-8 mx-auto">
             <div className="absolute inset-0 bg-opacity-70" />
             <div className="relative text-center text-slate-300">
                 <motion.p

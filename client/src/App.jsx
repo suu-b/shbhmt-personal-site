@@ -20,7 +20,7 @@ export default function App() {
   return (
     <div className="text-xl text-slate-400"> 
       {!loading ?
-          <section id="main-app" className="sm:w-full md:w-[50vw] mx-auto">
+          <section id="main-app" className="w-full px-4 md:px-0 md:w-[50vw] mx-auto">
           <Routes>
             <Route path="/" element={<LandingPage />} />
             <Route path="/content/:contentType" element={<Content />} />

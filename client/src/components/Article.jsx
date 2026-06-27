@@ -61,7 +61,7 @@ export default function Article() {
 
   return (
     <section className="article py-10">
-      <h1 className="text-5xl mt-20 ">{title}</h1>
+      <h1 className="text-3xl sm:text-4xl md:text-5xl mt-10 md:mt-20">{title}</h1>
 
       {description && (
         <p className="text-lg text-slate-400 mt-4 mb-6 leading-relaxed">

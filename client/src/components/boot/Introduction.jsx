@@ -30,7 +30,7 @@ export default function Introduction() {
     }, []);
 
     return (
-        <section className="h-screen flex flex-col items-center justify-center text-2xl sm:text-3xl md:text-4xl text-[#f3f3f3] text-justify w-full max-w-[50vw] px-4 mx-auto">
+        <section className="min-h-screen flex flex-col items-center justify-center text-xl sm:text-2xl md:text-3xl text-[#f3f3f3] text-justify w-full max-w-full md:max-w-[50vw] px-4 mx-auto">
             <motion.a
               href="https://en.wikipedia.org/wiki/Vitruvian_Man"
               target="_blank"

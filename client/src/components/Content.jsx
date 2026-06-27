@@ -42,7 +42,7 @@ export default function Content() {
         </a>
       )}
 
-      <h1 className="text-5xl mt-10">{contentData?.title}</h1>
+      <h1 className="text-3xl sm:text-4xl md:text-5xl mt-10">{contentData?.title}</h1>
       <p className="my-2">{contentData?.description}</p>
 
       <div className="mt-10">
