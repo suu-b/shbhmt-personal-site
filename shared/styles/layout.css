@@ -1,0 +1,18 @@
+/* Stylesheet contains layout tokens definitions across styles of cms and site portal */
+
+.layout-container {
+    width: 50vw;
+    margin: auto;
+    padding: 2.5rem 1rem;
+}
+
+@media (max-width: 768px) {
+    .layout-container {
+        width: 100%;
+        padding: 2rem 1rem;
+    }
+}
+
+.tight-br {
+    margin-top: 0px;
+}

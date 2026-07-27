@@ -1,0 +1,45 @@
+---
+import { getCollection } from "astro:content";
+
+const posts = await getCollection("articles");
+const featured = posts.find(
+    (p) => p.data.title === "On building a Personal Site",
+);
+
+if (!featured) return null;
+
+const formattedDate = featured.data.date.toLocaleDateString("en-US", {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+});
+---
+
+<section
+    class="card-featured"
+>
+    <div class="space-y-4">
+        <div class="flex items-center justify-between">
+            <span
+                class="badge-featured"
+            >
+                Featured
+            </span>
+            <span class="text-sm text-slate-500 font-light">{formattedDate}</span>
+        </div>
+
+        <h2 class="card-featured-title">{featured.data.title}</h2>
+        <p class="card-featured-desc">
+            {featured.data.description}
+        </p>
+
+        <div class="pt-3 flex justify-end">
+            <a
+                href={`/articles/${featured.id}`}
+                class="btn-primary"
+            >
+                Read
+            </a>
+        </div>
+    </div>
+</section>

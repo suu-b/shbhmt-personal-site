@@ -1,0 +1,92 @@
+---
+import { getCollection, render } from "astro:content";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+
+export async function getStaticPaths() {
+  const articles = await getCollection("articles");
+  return articles.map((article) => ({
+    params: { slug: article.id },
+    props: { article },
+  }));
+}
+
+const { article } = Astro.props;
+const { Content } = await render(article);
+---
+
+<BaseLayout title={article.data.title}>
+  <article class="article">
+    <header class="mb-8">
+      <a
+        href="/"
+        class="text-sm text-slate-500 hover:text-slate-300 transition-colors flex items-center gap-1.5 mb-6"
+      >
+        <svg
+          class="w-4 h-4"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+          stroke-width="2"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+        </svg>
+        Back to preface
+      </a>
+
+      <h1
+        class="text-3xl md:text-4xl text-slate-200 font-bold mb-3 leading-tight"
+      >
+        {article.data.title}
+      </h1>
+
+      {
+        article.data.description && (
+          <p class="mt-2 mb-4 text-lg text-slate-400 font-light italic leading-relaxed">
+            {article.data.description}
+          </p>
+        )
+      }
+
+      <div class="flex items-center gap-4 text-sm text-slate-500">
+        <time
+          >{
+            article.data.date.toLocaleDateString("en-US", {
+              year: "numeric",
+              month: "long",
+              day: "numeric",
+            })
+          }</time
+        >
+        {
+          article.data.tags &&
+            article.data.tags.map((tag) => (
+              <a
+                href={`/articles?tags=${tag}`}
+                class="uppercase tracking-wider px-2 py-0.5 border border-[#2D3033] rounded text-slate-500 bg-[#161616] text-[10px] hover:text-slate-300 hover:border-slate-500 transition-colors !no-underline"
+              >
+                {tag}
+              </a>
+            ))
+        }
+      </div>
+    </header>
+
+    <div class="article-content leading-relaxed text-justify">
+      <Content />
+    </div>
+  </article>
+
+  <script is:inline>
+    window.MathJax = {
+      tex: {
+        inlineMath: [["$", "$"], ["\\(", "\\)"]],
+        displayMath: [["$$", "$$"], ["\\[", "\\]"]],
+      },
+      svg: { fontCache: "global" }
+    };
+  </script>
+  <script is:inline async id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</BaseLayout>

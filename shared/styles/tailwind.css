@@ -1,0 +1,89 @@
+/* Stylesheet contains custom Tailwind CSS v4 component utilities shared across site and cms */
+
+@utility btn-primary {
+  @apply w-full sm:w-auto text-center px-3 py-1 border border-slate-400 rounded-lg bg-slate-400 text-[#101010] hover:bg-slate-300 transition-colors text-base font-medium whitespace-nowrap;
+}
+
+@utility btn-secondary {
+  @apply w-full flex justify-center items-center text-lg px-3 py-1 border border-slate-400 rounded-lg bg-slate-400 text-[#101010] font-medium hover:bg-slate-300 transition-colors whitespace-nowrap;
+}
+
+@utility search-input {
+  @apply w-full pl-10 pr-4 py-2 border border-[#2D3033] rounded-lg bg-[#161616] text-slate-300 text-base focus:outline-none focus:border-slate-500 transition-colors;
+}
+
+@utility badge-tag {
+  @apply text-[10px] uppercase tracking-wider px-2 py-0.5 border border-[#2D3033] rounded text-slate-500 bg-[#161616];
+}
+
+@utility post-list-item {
+  @apply py-8 hover:cursor-pointer transition-all duration-300 ease-in-out;
+}
+
+@utility card-featured {
+  @apply w-full mx-auto my-8 px-4 border p-5 border-2 border-[#2D3033] rounded-lg;
+}
+
+@utility avatar-circular {
+  @apply rounded-full h-[240px] w-[240px] md:h-[300px] md:w-[300px] mx-auto object-cover shadow-md;
+}
+
+@utility logo-link {
+  @apply mx-auto w-28 h-28 rounded-xl shadow-lg object-cover hover:scale-105 transition-all duration-300;
+}
+
+@utility link-back {
+  @apply text-sm text-slate-500 hover:text-slate-300 transition-colors flex items-center gap-1.5;
+}
+
+@utility card-image-cover {
+  @apply relative overflow-hidden rounded-lg shadow-lg w-full h-64 md:h-80 object-cover;
+}
+
+@utility card-grid {
+  @apply w-full min-h-[250px] p-5 border border-[#2D3033] rounded-lg hover:cursor-pointer hover:bg-[#0F0E0E] hover:shadow-[0_4px_10px_#0F0E0E] transition-all duration-300 ease-in-out flex flex-col;
+}
+
+@utility overlay-gradient {
+  @apply absolute inset-0 bg-gradient-to-t from-black/60 to-transparent;
+}
+
+@utility list-item-title {
+  @apply text-slate-200 mb-1 text-2xl font-semibold group-hover:text-slate-100 transition-colors;
+}
+
+@utility list-item-desc {
+  @apply text-lg text-slate-400 mb-2 leading-relaxed font-light;
+}
+
+@utility list-item-meta {
+  @apply flex items-center gap-3;
+}
+
+@utility badge-featured {
+  @apply inline-block bg-[#101010]/90 shadow px-3 py-1 rounded-full text-sm font-medium;
+}
+
+@utility card-featured-title {
+  @apply text-3xl text-slate-200 font-bold mb-3;
+}
+
+@utility card-featured-desc {
+  @apply text-base text-slate-400 leading-relaxed font-light;
+}
+
+@utility card-poem {
+  @apply w-full border border-slate-400 rounded-lg pt-3 pb-8;
+}
+
+@utility poem-title {
+  @apply text-center text-2xl font-semibold;
+}
+
+@utility poem-lyrics {
+  @apply text-left w-fit mx-auto leading-relaxed text-slate-300 px-4 md:px-0;
+}
+
+@utility contact-pill {
+  @apply bg-slate-400 text-[#101010] rounded px-1.5 py-0.5 break-all inline-block text-base font-medium;
+}

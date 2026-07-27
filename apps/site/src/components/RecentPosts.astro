@@ -1,0 +1,130 @@
+---
+import { getCollection } from "astro:content";
+
+const posts = await getCollection("articles");
+
+// Filter drafts and sort chronologically (newest first), limit to latest 3
+const activePosts = posts
+  .filter((p) => !p.data.draft)
+  .sort((a, b) => b.data.date.getTime() - a.data.date.getTime())
+  .slice(0, 3);
+
+function formatDate(date: Date) {
+  const day = date.getDate();
+  const month = date.toLocaleString("default", { month: "long" });
+  const year = date.getFullYear();
+
+  const suffix =
+    day % 10 === 1 && day !== 11
+      ? "st"
+      : day % 10 === 2 && day !== 12
+        ? "nd"
+        : day % 10 === 3 && day !== 13
+          ? "rd"
+          : "th";
+
+  return `${month} ${day}${suffix}, ${year}`;
+}
+---
+
+<section id="articles" class="w-full my-12">
+  <h2 class="text-2xl text-slate-300 font-semibold mb-5 text-center">Latest</h2>
+
+  <div
+    class="mb-6 flex flex-col sm:flex-row gap-4 items-center justify-between"
+  >
+    <!-- Search Box -->
+    <div class="flex items-center gap-2 flex-1 w-full">
+      <div class="relative flex-1 w-full">
+        <input
+          type="text"
+          id="landing-search-input"
+          placeholder="Search any..."
+          class="search-input !pl-4"
+        />
+      </div>
+      <button
+        id="landing-search-btn"
+        class="btn-secondary w-[42px] h-[42px] flex-shrink-0 flex items-center justify-center rounded-lg"
+        title="Search"
+      >
+        <svg
+          class="w-5 h-5 text-[#101010]"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+          stroke-width="2.5"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+          ></path>
+        </svg>
+      </button>
+    </div>
+
+    <!-- See All Link -->
+    <a href="/articles" class="btn-primary"> See All </a>
+  </div>
+
+  <div class="flex flex-col">
+    {
+      activePosts.map((post, index) => {
+        return (
+            <div
+              class={`post-list-item relative group ${
+                index < activePosts.length - 1
+                  ? "border-b border-[#2D3033]"
+                  : ""
+              }`}
+            >
+              <h3 class="list-item-title">
+                <a href={`/articles/${post.id}`} class="after:absolute after:inset-0 after:z-0">
+                  {post.data.title}
+                </a>
+              </h3>
+              <p class="list-item-desc">{post.data.description}</p>
+              <div class="list-item-meta">
+                <span class="text-sm text-slate-500">
+                  {formatDate(post.data.date)}
+                </span>
+                {post.data.tags &&
+                  post.data.tags.map((tag) => (
+                    <a href={`/articles?tags=${tag}`} class="badge-tag relative z-10 hover:text-slate-300 hover:border-slate-500 transition-colors">
+                      {tag}
+                    </a>
+                  ))}
+              </div>
+            </div>
+        );
+      })
+    }
+  </div>
+</section>
+
+<script>
+  const searchInput = document.getElementById("landing-search-input") as HTMLInputElement | null;
+  const searchBtn = document.getElementById("landing-search-btn");
+
+  function triggerSearch() {
+    if (searchInput) {
+      const query = searchInput.value.trim();
+      if (query) {
+        window.location.href = `/articles?q=${encodeURIComponent(query)}`;
+      } else {
+        window.location.href = "/articles";
+      }
+    }
+  }
+
+  searchInput?.addEventListener("keydown", (e) => {
+    if (e.key === "Enter") {
+      triggerSearch();
+    }
+  });
+
+  searchBtn?.addEventListener("click", () => {
+    triggerSearch();
+  });
+</script>
