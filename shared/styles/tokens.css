@@ -1,0 +1,15 @@
+/* Stylesheet contains reusable token definitions across styles of cms and site portal */
+
+:root {
+    /* Color Palette */
+    --color-bg: #101010;
+    --color-text-muted: #9CA3AF;
+    --color-border: #2D3033;
+    --color-selection-bg: #9CA3AF;
+    --color-selection-text: #101010;
+    --color-link-dotted: #94a3b8;
+
+    /* Typography */
+    --font-serif: 'EB Garamond', Garamond, 'Times New Roman', Times, serif;
+    --font-mono: 'Fira Code', 'Courier New', monospace;
+}

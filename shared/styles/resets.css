@@ -1,0 +1,57 @@
+/* Stylesheet contains resets definitions across styles of cms and site portal */
+html,
+body {
+    font-family: var(--font-serif);
+    margin: 0;
+    padding: 0;
+    background-color: var(--color-bg);
+}
+
+::selection {
+    background: var(--color-selection-bg);
+    color: var(--color-selection-text);
+}
+
+::-moz-selection {
+    background: var(--color-selection-bg);
+    color: var(--color-selection-text);
+}
+
+/* --- Content Separators & Dividers --- */
+hr {
+    border: none;
+    height: 1px;
+    background: var(--color-selection-bg);
+    margin: 2rem 0;
+    opacity: 0.6;
+}
+
+hr.solid {
+    background: var(--color-selection-bg);
+    opacity: 0.8;
+}
+
+hr.dashed {
+    background: repeating-linear-gradient(to right,
+        var(--color-selection-bg) 0,
+        var(--color-selection-bg) 8px,
+        transparent 8px,
+        transparent 16px);
+}
+
+/* --- Slower Bounce Animation Override --- */
+@keyframes bounce {
+    0%,
+    100% {
+        transform: translateY(-25%);
+        animation-timing-function: cubic-bezier(0.8, 0, 1, 1);
+    }
+    50% {
+        transform: none;
+        animation-timing-function: cubic-bezier(0, 0, 0.2, 1);
+    }
+}
+
+.animate-bounce {
+    animation: bounce 2.5s infinite;
+}
