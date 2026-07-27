@@ -1,0 +1,30 @@
+const { contextBridge, ipcRenderer } = require('electron');
+
+contextBridge.exposeInMainWorld('api', {
+  pushToGitHub: (path, message, content) => {
+    return ipcRenderer.invoke('push-to-github', { path, message, content });
+  },
+  updateOnGitHub: (path, message, content) => {
+    return ipcRenderer.invoke('update-on-github', { path, message, content });
+  },
+  readFileFromGitHub: (path) => {
+    return ipcRenderer.invoke('read-from-github', { path });
+  },
+  deployToGitHub: (contentPath, indexPath, content, indexContent, message) => {
+    return ipcRenderer.invoke('deploy-to-github', { contentPath, indexPath, content, indexContent, message });
+  }
+});
+
+contextBridge.exposeInMainWorld('nav', {
+  go: (target) => ipcRenderer.send('navigate', target)
+})
+
+contextBridge.exposeInMainWorld('state', {
+  set(key, value) {
+    ipcRenderer.send('set-state', { key, value });
+  },
+  async get(key) {
+    return await ipcRenderer.invoke('get-state', key);
+  }
+});
+

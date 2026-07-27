@@ -1,0 +1,11 @@
+{
+  "name": "preface",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev:site": "pnpm --filter site dev",
+    "build:site": "pnpm --filter site build",
+    "build:cms": "pnpm --filter cms build",
+    "clean": "pnpm -r exec rm -rf node_modules dist"
+  }
+}

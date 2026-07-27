@@ -1,0 +1,71 @@
+/* Stylesheet contains article rendering styles across styles of cms and site portal */
+
+/* --- Rich Text & Article Specific Layouts --- */
+.article-content {
+    max-width: 650px;
+    margin: 0 auto;
+}
+
+.article a,
+.article-content a {
+    text-decoration: underline;
+    text-decoration-style: dotted;
+    text-decoration-color: var(--color-link-dotted);
+    text-underline-offset: 8px;
+    text-decoration-thickness: 2px;
+    color: inherit;
+    transition: color 0.3s ease;
+}
+
+.article h3,
+.article-content h3 {
+    margin-top: 20px;
+    margin-bottom: 0;
+    letter-spacing: 0.025em;
+    font-size: larger;
+    font-weight: 900;
+}
+
+/* --- Code Formatting & Pre blocks --- */
+pre {
+    background-color: #1a1a1a;
+    color: #e5e5e5;
+    padding: 1rem;
+    border-radius: 0.5rem;
+    overflow-x: auto;
+    margin: 1.5rem 0;
+    font-family: var(--font-mono);
+    font-size: 0.95rem;
+    line-height: 1.5;
+    border: 1px solid #2f2f2f;
+}
+
+code {
+    color: #f5f5f5;
+    padding: 0.2em 0.4em;
+    border-radius: 0.3em;
+    font-family: var(--font-mono);
+    font-size: 0.9em;
+}
+
+/* --- Embedded Media & Iframes --- */
+.article iframe,
+.article-content iframe {
+    display: block;
+    margin: 2rem auto;
+    max-width: 100%;
+    width: 100%;
+    height: 400px;
+    border: none;
+    border-radius: 0.75rem;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.5);
+}
+
+@media (max-width: 768px) {
+
+    .article iframe,
+    .article-content iframe {
+        height: 280px;
+        margin: 1.5rem auto;
+    }
+}

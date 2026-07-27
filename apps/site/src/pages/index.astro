@@ -1,0 +1,35 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Introduction from "../components/Introduction.astro";
+import Contents from "../components/Contents.astro";
+import FeaturedPost from "../components/FeaturedPost.astro";
+import RecentPosts from "../components/RecentPosts.astro";
+import Poem from "../components/Poem.astro";
+---
+
+<BaseLayout title="Preface">
+	<Introduction />
+	<Contents />
+	<img
+		src="/assets/border.png"
+		alt="divider border"
+		class="w-[40%] my-5 mx-auto"
+	/>
+
+	<FeaturedPost />
+	<img
+		src="/assets/border.png"
+		alt="divider border"
+		class="w-[40%] my-5 mx-auto"
+	/>
+
+	<RecentPosts />
+	<img
+		src="/assets/border.png"
+		alt="divider border"
+		class="w-[40%] my-5 mx-auto"
+	/>
+
+	<h1 class="text-center text-2xl mb-5">A Beloved Poem</h1>
+	<Poem />
+</BaseLayout>

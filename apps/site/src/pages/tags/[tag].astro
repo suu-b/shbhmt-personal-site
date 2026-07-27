@@ -1,0 +1,109 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('articles');
+  const activePosts = posts.filter(p => !p.data.draft);
+  
+  // Extract all unique tags
+  const tags = [...new Set(activePosts.flatMap(post => post.data.tags || []))];
+  
+  return tags.map(tag => ({
+    params: { tag },
+    props: { 
+      posts: activePosts.filter(post => post.data.tags.includes(tag))
+    }
+  }));
+}
+
+const { tag } = Astro.params;
+const { posts } = Astro.props;
+
+// Sort posts chronologically (newest first)
+const sortedPosts = posts.sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
+
+function formatDate(date: Date) {
+  const day = date.getDate();
+  const month = date.toLocaleString("default", { month: "long" });
+  const year = date.getFullYear();
+
+  const suffix =
+    day % 10 === 1 && day !== 11
+      ? "st"
+      : day % 10 === 2 && day !== 12
+        ? "nd"
+        : day % 10 === 3 && day !== 13
+          ? "rd"
+          : "th";
+
+  return `${month} ${day}${suffix}, ${year}`;
+}
+---
+
+<BaseLayout title={`Tag: ${tag}`}>
+  <section class="w-full my-12">
+    <!-- Back Link -->
+    <a href="/" class="link-back mb-8">
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke-width="1.5"
+        stroke="currentColor"
+        class="w-4 h-4"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          d="M10 19l-7-7m0 0l7-7m-7 7h18"
+        />
+      </svg>
+      Back to preface
+    </a>
+
+    <!-- Header -->
+    <div class="mb-8 text-center">
+      <h2 class="text-3xl text-slate-200 font-semibold mb-2">Articles Tagged: {tag}</h2>
+      <p class="text-sm text-slate-500">{sortedPosts.length} post{sortedPosts.length === 1 ? '' : 's'}</p>
+    </div>
+
+    <!-- Posts List -->
+    <div class="flex flex-col">
+      {
+        sortedPosts.map((post, index) => {
+          return (
+            <div
+              class={`post-list-item relative group ${
+                index < sortedPosts.length - 1 ? "border-b border-[#2D3033]" : ""
+              }`}
+            >
+              <h3 class="list-item-title">
+                <a href={`/articles/${post.id}`} class="after:absolute after:inset-0 after:z-0">
+                  {post.data.title}
+                </a>
+              </h3>
+              <p class="list-item-desc">{post.data.description}</p>
+              <div class="list-item-meta">
+                <span class="text-sm text-slate-500">
+                  {formatDate(post.data.date)}
+                </span>
+                {post.data.tags &&
+                  post.data.tags.map((t) => (
+                    <a 
+                      href={`/tags/${t}`} 
+                      class={`badge-tag relative z-10 hover:text-slate-300 hover:border-slate-500 transition-colors ${
+                        t === tag ? 'text-slate-300 border-slate-500 bg-[#202020]' : ''
+                      }`}
+                    >
+                      {t}
+                    </a>
+                  ))}
+              </div>
+            </div>
+          );
+        })
+      }
+    </div>
+  </section>
+</BaseLayout>

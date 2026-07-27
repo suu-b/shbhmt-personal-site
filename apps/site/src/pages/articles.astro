@@ -1,0 +1,562 @@
+---
+import { getCollection } from "astro:content";
+import BaseLayout from "../layouts/BaseLayout.astro";
+
+const posts = await getCollection("articles");
+const activePosts = posts.filter((p) => !p.data.draft);
+
+// Get all unique tags across all articles to populate the filter dropdown
+const allTags = [
+  ...new Set(activePosts.flatMap((post) => post.data.tags || [])),
+].sort();
+
+function formatDate(date: Date) {
+  const day = date.getDate();
+  const month = date.toLocaleString("default", { month: "long" });
+  const year = date.getFullYear();
+
+  const suffix =
+    day % 10 === 1 && day !== 11
+      ? "st"
+      : day % 10 === 2 && day !== 12
+        ? "nd"
+        : day % 10 === 3 && day !== 13
+          ? "rd"
+          : "th";
+
+  return `${month} ${day}${suffix}, ${year}`;
+}
+---
+
+<BaseLayout title="Articles">
+  <section class="w-full my-12">
+    <!-- Back to Preface Link -->
+    <a href="/" class="link-back mb-8">
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke-width="1.5"
+        stroke="currentColor"
+        class="w-4 h-4"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+      </svg>
+      Back to preface
+    </a>
+
+    <!-- Header -->
+    <div class="mb-8 text-center">
+      <h2 class="text-3xl text-slate-200 font-semibold mb-2">Articles</h2>
+    </div>
+
+    <!-- Filter Control Bar -->
+    <div
+      class="mb-6 flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between border-b border-[#2D3033] pb-6"
+    >
+      <!-- Left side: Text Search Input Group -->
+      <div class="flex items-center gap-2 w-full sm:w-72">
+        <input
+          type="text"
+          id="article-search-input"
+          placeholder="Search articles..."
+          class="search-input !pl-4"
+        />
+      </div>
+
+      <!-- Right side: Dropdown & Sort Button Group -->
+      <div class="flex flex-col sm:flex-row gap-3 w-full sm:w-auto z-30">
+        <!-- Tags Select Dropdown -->
+        <div class="relative inline-block text-left w-full sm:w-auto">
+          <button
+            id="tag-dropdown-btn"
+            class="btn-secondary w-full sm:w-auto flex items-center justify-between gap-1.5 whitespace-nowrap"
+          >
+            <span>Filter by Tags</span>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke-width="2.5"
+              stroke="currentColor"
+              class="w-3.5 h-3.5 transition-transform duration-200"
+              id="dropdown-chevron"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M19.5 8.25l-7.5 7.5-7.5-7.5"></path>
+            </svg>
+          </button>
+
+          <div
+            id="tag-dropdown-menu"
+            class="hidden absolute right-0 sm:left-auto mt-2 w-full sm:w-64 rounded-md bg-[#161616] border border-[#2D3033] shadow-lg focus:outline-none p-2"
+          >
+            <div class="border-b border-[#2D3033] pb-2 mb-1">
+              <input
+                type="text"
+                id="tag-search-input"
+                placeholder="Search tags..."
+                class="w-full px-3 py-2 text-base rounded bg-[#202020] border border-[#2D3033] text-slate-200 placeholder-slate-500 focus:outline-none focus:border-slate-500"
+              />
+            </div>
+            <div class="py-1 max-h-60 overflow-y-auto" role="menu">
+              {
+                allTags.map((tag) => (
+                  <button
+                    class="dropdown-tag-option block w-full text-left px-4 py-2.5 text-base text-slate-300 hover:bg-[#202020] hover:text-slate-100 transition-colors"
+                    role="menuitem"
+                    data-tag={tag}
+                  >
+                    {tag}
+                  </button>
+                ))
+              }
+            </div>
+          </div>
+        </div>
+
+        <!-- Chronological Sort Toggle -->
+        <button
+          id="sort-btn"
+          class="btn-secondary w-full sm:w-auto flex items-center justify-center gap-2 whitespace-nowrap"
+          data-sort="desc"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke-width="1.5"
+            stroke="currentColor"
+            class="w-4 h-4 transition-transform duration-300"
+            id="sort-icon"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              d="M3 4.5h14.25M3 9h9.75M3 13.5h5.25m5.25-.75L17.25 9m0 0L21 12.75M17.25 9v10.5"
+            ></path>
+          </svg>
+          <span id="sort-btn-text">Newest First</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Selected Active Tags Row -->
+    <div id="active-tags-container" class="flex flex-wrap gap-2 mb-6 hidden">
+      <!-- Active tag pills will be dynamically generated here -->
+    </div>
+
+    <!-- Empty State -->
+    <div
+      id="empty-state"
+      class="hidden text-center py-20 border border-dashed border-[#2D3033] rounded-lg"
+    >
+      <p class="text-lg text-slate-500 font-light">
+        No articles match your selected tag filters.
+      </p>
+      <button
+        id="clear-filters-btn"
+        class="mt-4 text-sm underline text-slate-400 hover:text-slate-200 transition-colors"
+      >
+        Clear all filters
+      </button>
+    </div>
+
+    <!-- Articles List Container -->
+    <div id="articles-list" class="flex flex-col">
+      {
+        activePosts.map((post) => {
+          return (
+            <div
+              class="post-list-item relative group border-b border-[#2D3033] last:border-0"
+              data-tags={JSON.stringify(post.data.tags || [])}
+              data-date={post.data.date.getTime()}
+            >
+              <h3 class="list-item-title">
+                <a
+                  href={`/articles/${post.id}`}
+                  class="after:absolute after:inset-0 after:z-0"
+                >
+                  {post.data.title}
+                </a>
+              </h3>
+              <p class="list-item-desc">{post.data.description}</p>
+              <div class="list-item-meta">
+                <span class="text-sm text-slate-500">
+                  {formatDate(post.data.date)}
+                </span>
+                {post.data.tags &&
+                  post.data.tags.map((tag) => (
+                    <a
+                      href={`/articles?tags=${tag}`}
+                      class="badge-tag relative z-10 select-tag-badge cursor-pointer hover:text-slate-300 hover:border-slate-500 transition-colors"
+                      data-tag={tag}
+                    >
+                      {tag}
+                    </a>
+                  ))}
+              </div>
+            </div>
+          );
+        })
+      }
+    </div>
+  </section>
+
+  <!-- Client-side Interactive Filter Script -->
+  <script>
+    let activeTags: string[] = [];
+    let searchQuery = "";
+    let sortOrder = "desc";
+
+    const articleSearchInput = document.getElementById(
+      "article-search-input",
+    ) as HTMLInputElement | null;
+    const searchSubmitBtn = document.getElementById("search-submit-btn");
+    const dropdownBtn = document.getElementById("tag-dropdown-btn");
+    const dropdownMenu = document.getElementById("tag-dropdown-menu");
+    const dropdownChevron = document.getElementById("dropdown-chevron");
+    const dropdownOptions = document.querySelectorAll(".dropdown-tag-option");
+    const tagSearchInput = document.getElementById(
+      "tag-search-input",
+    ) as HTMLInputElement | null;
+    const activeTagsContainer = document.getElementById(
+      "active-tags-container",
+    );
+    const sortBtn = document.getElementById("sort-btn");
+    const sortBtnText = document.getElementById("sort-btn-text");
+    const sortIcon = document.getElementById("sort-icon");
+    const articlesList = document.getElementById("articles-list");
+    const articles = Array.from(
+      document.querySelectorAll("#articles-list .post-list-item"),
+    ) as HTMLElement[];
+    const resultsCount = document.getElementById("results-count");
+    const emptyState = document.getElementById("empty-state");
+    const clearFiltersBtn = document.getElementById("clear-filters-btn");
+
+    function initFiltersFromUrl() {
+      const params = new URLSearchParams(window.location.search);
+
+      const tagsParam = params.get("tags");
+      activeTags = tagsParam
+        ? tagsParam.split(",").map((t) => t.trim().toLowerCase())
+        : [];
+
+      const qParam = params.get("q");
+      searchQuery = qParam ? qParam.trim().toLowerCase() : "";
+      if (articleSearchInput) {
+        articleSearchInput.value = qParam || "";
+      }
+
+      const sortParam = params.get("sort");
+      if (sortParam === "asc" || sortParam === "desc") {
+        sortOrder = sortParam;
+      }
+
+      applyFiltersAndSort();
+    }
+
+    function updateUrlParams() {
+      const params = new URLSearchParams();
+      if (activeTags.length > 0) {
+        params.set("tags", activeTags.join(","));
+      }
+      if (searchQuery) {
+        params.set("q", searchQuery);
+      }
+      if (sortOrder !== "desc") {
+        params.set("sort", sortOrder);
+      }
+
+      const newQuery = params.toString()
+        ? "?" + params.toString()
+        : window.location.pathname;
+      window.history.pushState({}, "", newQuery);
+    }
+
+    function toggleDropdown() {
+      if (!dropdownMenu || !dropdownChevron) return;
+      const isHidden = dropdownMenu.classList.toggle("hidden");
+      if (isHidden) {
+        dropdownChevron.classList.remove("rotate-180");
+      } else {
+        dropdownChevron.classList.add("rotate-180");
+        if (tagSearchInput) {
+          tagSearchInput.value = "";
+        }
+        dropdownOptions.forEach((opt) => {
+          (opt as HTMLElement).style.display = "";
+        });
+        if (tagSearchInput) {
+          setTimeout(() => tagSearchInput.focus(), 50);
+        }
+      }
+    }
+
+    document.addEventListener("click", (e) => {
+      if (!dropdownBtn || !dropdownMenu || !dropdownChevron) return;
+      if (
+        !dropdownBtn.contains(e.target as Node) &&
+        !dropdownMenu.contains(e.target as Node)
+      ) {
+        dropdownMenu.classList.add("hidden");
+        dropdownChevron.classList.remove("rotate-180");
+      }
+    });
+
+    dropdownBtn?.addEventListener("click", toggleDropdown);
+
+    tagSearchInput?.addEventListener("input", () => {
+      if (!tagSearchInput) return;
+      const query = tagSearchInput.value.toLowerCase().trim();
+      dropdownOptions.forEach((option) => {
+        const tag = option.getAttribute("data-tag");
+        if (!tag) return;
+        const cleanTag = tag.toLowerCase();
+        if (cleanTag.includes(query)) {
+          (option as HTMLElement).style.display = "";
+        } else {
+          (option as HTMLElement).style.display = "none";
+        }
+      });
+    });
+
+    function applyFiltersAndSort() {
+      let visibleCount = 0;
+
+      articles.forEach((article) => {
+        const itemTags = JSON.parse(
+          article.getAttribute("data-tags") || "[]",
+        ) as string[];
+        const matchesTags = activeTags.every((tag) =>
+          itemTags.map((t) => t.toLowerCase()).includes(tag),
+        );
+
+        const titleText =
+          article
+            .querySelector(".list-item-title")
+            ?.textContent?.toLowerCase() || "";
+        const descText =
+          article
+            .querySelector(".list-item-desc")
+            ?.textContent?.toLowerCase() || "";
+        const matchesQuery =
+          !searchQuery ||
+          titleText.includes(searchQuery) ||
+          descText.includes(searchQuery);
+
+        if (matchesTags && matchesQuery) {
+          article.style.display = "";
+          visibleCount++;
+        } else {
+          article.style.display = "none";
+        }
+      });
+
+      articles.sort((a, b) => {
+        const dateA = parseInt(a.getAttribute("data-date") || "0");
+        const dateB = parseInt(b.getAttribute("data-date") || "0");
+        return sortOrder === "asc" ? dateA - dateB : dateB - dateA;
+      });
+
+      if (articlesList) {
+        articles.forEach((article) => articlesList.appendChild(article));
+      }
+
+      if (resultsCount) {
+        resultsCount.textContent = `${visibleCount} article${visibleCount === 1 ? "" : "s"}`;
+      }
+
+      if (emptyState && articlesList) {
+        if (visibleCount === 0) {
+          emptyState.classList.remove("hidden");
+          articlesList.classList.add("hidden");
+        } else {
+          emptyState.classList.add("hidden");
+          articlesList.classList.remove("hidden");
+        }
+      }
+
+      renderActivePills();
+      updateSortButtonUI();
+      updateDropdownUI();
+    }
+
+    function updateDropdownUI() {
+      if (!dropdownOptions) return;
+      dropdownOptions.forEach((option) => {
+        const tag = option.getAttribute("data-tag");
+        if (!tag) return;
+        const cleanTag = tag.trim().toLowerCase();
+        const isActive = activeTags.includes(cleanTag);
+
+        if (isActive) {
+          option.classList.add("bg-[#202020]", "text-slate-100", "font-medium");
+          option.innerHTML = `✓ ${cleanTag}`;
+        } else {
+          option.classList.remove(
+            "bg-[#202020]",
+            "text-slate-100",
+            "font-medium",
+          );
+          option.innerHTML = cleanTag;
+        }
+      });
+    }
+
+    function renderActivePills() {
+      if (!activeTagsContainer) return;
+
+      if (activeTags.length === 0 && !searchQuery) {
+        activeTagsContainer.classList.add("hidden");
+        activeTagsContainer.innerHTML = "";
+        return;
+      }
+
+      activeTagsContainer.classList.remove("hidden");
+      activeTagsContainer.innerHTML = "";
+
+      activeTags.forEach((tag) => {
+        const pill = document.createElement("span");
+        pill.className =
+          "badge-tag relative z-10 cursor-pointer flex items-center gap-1.5 hover:text-slate-300 hover:border-slate-500 transition-all";
+        pill.innerHTML = `
+          ${tag}
+          <span class="remove-tag text-xs font-bold text-slate-500 hover:text-slate-300">×</span>
+        `;
+
+        pill.addEventListener("click", () => {
+          removeTagFilter(tag);
+        });
+
+        activeTagsContainer.appendChild(pill);
+      });
+
+      if (searchQuery) {
+        const searchPill = document.createElement("span");
+        searchPill.className =
+          "badge-tag relative z-10 cursor-pointer flex items-center gap-1.5 hover:text-slate-200 hover:border-slate-400 transition-all border-slate-500 text-slate-300 bg-[#202020]";
+        searchPill.innerHTML = `
+          <svg class="w-3.5 h-3.5 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+          </svg>
+          <span class="max-w-[120px] truncate">"${searchQuery}"</span>
+          <span class="remove-tag text-sm font-bold text-slate-500 hover:text-slate-300 transition-colors ml-0.5">×</span>
+        `;
+
+        searchPill.addEventListener("click", () => {
+          searchQuery = "";
+          if (articleSearchInput) {
+            articleSearchInput.value = "";
+          }
+          updateUrlParams();
+          applyFiltersAndSort();
+        });
+
+        activeTagsContainer.appendChild(searchPill);
+      }
+    }
+
+    function updateSortButtonUI() {
+      if (sortOrder === "asc") {
+        if (sortBtnText) sortBtnText.textContent = "Oldest First";
+        if (sortIcon) sortIcon.classList.add("rotate-180");
+      } else {
+        if (sortBtnText) sortBtnText.textContent = "Newest First";
+        if (sortIcon) sortIcon.classList.remove("rotate-180");
+      }
+    }
+
+    function addTagFilter(tag: string) {
+      const cleanTag = tag.trim().toLowerCase();
+      if (cleanTag && !activeTags.includes(cleanTag)) {
+        activeTags.push(cleanTag);
+        updateUrlParams();
+        applyFiltersAndSort();
+      }
+    }
+
+    function removeTagFilter(tag: string) {
+      const cleanTag = tag.trim().toLowerCase();
+      activeTags = activeTags.filter((t) => t !== cleanTag);
+      updateUrlParams();
+      applyFiltersAndSort();
+    }
+
+    dropdownOptions.forEach((option) => {
+      option.addEventListener("click", (e) => {
+        if (!dropdownMenu || !dropdownChevron) return;
+        const tag = option.getAttribute("data-tag");
+        if (tag) {
+          const cleanTag = tag.trim().toLowerCase();
+          if (activeTags.includes(cleanTag)) {
+            removeTagFilter(cleanTag);
+          } else {
+            addTagFilter(cleanTag);
+          }
+          dropdownMenu.classList.add("hidden");
+          dropdownChevron.classList.remove("rotate-180");
+        }
+      });
+    });
+
+    document.querySelectorAll(".select-tag-badge").forEach((badge) => {
+      badge.addEventListener("click", (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        const tag = badge.getAttribute("data-tag");
+        if (tag) {
+          addTagFilter(tag);
+        }
+      });
+    });
+
+    sortBtn?.addEventListener("click", () => {
+      sortOrder = sortOrder === "desc" ? "asc" : "desc";
+      updateUrlParams();
+      applyFiltersAndSort();
+    });
+
+    clearFiltersBtn?.addEventListener("click", () => {
+      activeTags = [];
+      searchQuery = "";
+      if (articleSearchInput) {
+        articleSearchInput.value = "";
+      }
+      updateUrlParams();
+      applyFiltersAndSort();
+    });
+
+    articleSearchInput?.addEventListener("input", () => {
+      if (!articleSearchInput) return;
+      searchQuery = articleSearchInput.value.toLowerCase().trim();
+      updateUrlParams();
+      applyFiltersAndSort();
+    });
+
+    articleSearchInput?.addEventListener("keydown", (e) => {
+      if (e.key === "Enter") {
+        if (!articleSearchInput) return;
+        searchQuery = articleSearchInput.value.toLowerCase().trim();
+        updateUrlParams();
+        applyFiltersAndSort();
+      }
+    });
+
+    searchSubmitBtn?.addEventListener("click", () => {
+      if (!articleSearchInput) return;
+      searchQuery = articleSearchInput.value.toLowerCase().trim();
+      updateUrlParams();
+      applyFiltersAndSort();
+    });
+
+    window.addEventListener("popstate", initFiltersFromUrl);
+
+    initFiltersFromUrl();
+  </script>
+</BaseLayout>
