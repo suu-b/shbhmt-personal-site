@@ -53,6 +53,20 @@ const readFileFromGitHub = async (path) => {
         console.error("Some error occurred:", error);
         return "";
     }
+}
+
+const readDirFromGitHub = async (path) => {
+    try {
+        const { data } = await octokit.repos.getContent({
+            owner,
+            repo,
+            path
+        });
+        return data;
+    } catch (error) {
+        console.error("Error reading directory from GitHub:", error);
+        return [];
+    }
 } 
 
 //not being used anywhere: part of the 2 commit pipeline
@@ -110,8 +124,7 @@ const updateOnGitHub = async (path, message, content) => {
     }
 }
 
-//method that does things in 1 commit only: saves the github actions overhead
-const deployToGitHub = async (contentPath, indexPath, content, indexContent, message) => {
+const deployToGitHub = async (contentPath, content, message) => {
     try {
         const { data: repoData } = await octokit.repos.get({ owner, repo });
         const defaultBranch = repoData.default_branch;
@@ -124,23 +137,12 @@ const deployToGitHub = async (contentPath, indexPath, content, indexContent, mes
         
         const baseCommitSha = latestCommit.sha;
         
-        let finalIndexContent = indexContent;
-        if (!indexContent.includes('date,title,description,thumbnail,credits')) {
-            const headers = "date,title,description,thumbnail,credits\n";
-            finalIndexContent = headers + indexContent;
-        }
         const treeItems = [];
         treeItems.push({
             path: contentPath,
             mode: '100644',
             type: 'blob',
             content: content 
-        });
-        treeItems.push({
-            path: indexPath,
-            mode: '100644',
-            type: 'blob',
-            content: finalIndexContent
         });
         
         const { data: newTree } = await octokit.git.createTree({
@@ -163,12 +165,12 @@ const deployToGitHub = async (contentPath, indexPath, content, indexContent, mes
             sha: commit.sha
         });
         
-        console.log("Files deployed to GitHub successfully in single commit.");
+        console.log("File deployed to GitHub successfully in single commit.");
         return true;
     } catch (error) {
-        console.error("Error deploying files to GitHub:", error);
+        console.error("Error deploying file to GitHub:", error);
         throw error;
     }
 }
 
-module.exports = { pushToGitHub, updateOnGitHub, readFileFromGitHub, deployToGitHub };
+module.exports = { pushToGitHub, updateOnGitHub, readFileFromGitHub, deployToGitHub, readDirFromGitHub };

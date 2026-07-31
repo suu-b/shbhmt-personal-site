@@ -33,7 +33,7 @@ const { Content } = await render(article);
             stroke-linejoin="round"
             d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
         </svg>
-        Back to preface
+        Back
       </a>
 
       <h1
@@ -82,11 +82,21 @@ const { Content } = await render(article);
   <script is:inline>
     window.MathJax = {
       tex: {
-        inlineMath: [["$", "$"], ["\\(", "\\)"]],
-        displayMath: [["$$", "$$"], ["\\[", "\\]"]],
+        inlineMath: [
+          ["$", "$"],
+          ["\\(", "\\)"],
+        ],
+        displayMath: [
+          ["$$", "$$"],
+          ["\\[", "\\]"],
+        ],
       },
-      svg: { fontCache: "global" }
+      svg: { fontCache: "global" },
     };
   </script>
-  <script is:inline async id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+  <script
+    is:inline
+    async
+    id="MathJax-script"
+    src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 </BaseLayout>

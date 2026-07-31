@@ -1,19 +1,21 @@
 ---
-import { getCollection } from 'astro:content';
-import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getCollection } from "astro:content";
+import BaseLayout from "../../layouts/BaseLayout.astro";
 
 export async function getStaticPaths() {
-  const posts = await getCollection('articles');
-  const activePosts = posts.filter(p => !p.data.draft);
-  
+  const posts = await getCollection("articles");
+  const activePosts = posts.filter((p) => !p.data.draft);
+
   // Extract all unique tags
-  const tags = [...new Set(activePosts.flatMap(post => post.data.tags || []))];
-  
-  return tags.map(tag => ({
+  const tags = [
+    ...new Set(activePosts.flatMap((post) => post.data.tags || [])),
+  ];
+
+  return tags.map((tag) => ({
     params: { tag },
-    props: { 
-      posts: activePosts.filter(post => post.data.tags.includes(tag))
-    }
+    props: {
+      posts: activePosts.filter((post) => post.data.tags.includes(tag)),
+    },
   }));
 }
 
@@ -21,7 +23,9 @@ const { tag } = Astro.params;
 const { posts } = Astro.props;
 
 // Sort posts chronologically (newest first)
-const sortedPosts = posts.sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
+const sortedPosts = posts.sort(
+  (a, b) => b.data.date.getTime() - a.data.date.getTime(),
+);
 
 function formatDate(date: Date) {
   const day = date.getDate();
@@ -42,9 +46,9 @@ function formatDate(date: Date) {
 ---
 
 <BaseLayout title={`Tag: ${tag}`}>
-  <section class="w-full my-12">
+  <section class="w-full my-12 text-lg">
     <!-- Back Link -->
-    <a href="/" class="link-back mb-8">
+    <a href="/" class="link-back mb-8 text-lg">
       <svg
         xmlns="http://www.w3.org/2000/svg"
         fill="none"
@@ -56,16 +60,19 @@ function formatDate(date: Date) {
         <path
           stroke-linecap="round"
           stroke-linejoin="round"
-          d="M10 19l-7-7m0 0l7-7m-7 7h18"
-        />
+          d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
       </svg>
       Back to preface
     </a>
 
     <!-- Header -->
     <div class="mb-8 text-center">
-      <h2 class="text-3xl text-slate-200 font-semibold mb-2">Articles Tagged: {tag}</h2>
-      <p class="text-sm text-slate-500">{sortedPosts.length} post{sortedPosts.length === 1 ? '' : 's'}</p>
+      <h2 class="text-3xl text-slate-200 font-semibold mb-2">
+        Articles Tagged: {tag}
+      </h2>
+      <p class="text-sm text-slate-500">
+        {sortedPosts.length} post{sortedPosts.length === 1 ? "" : "s"}
+      </p>
     </div>
 
     <!-- Posts List -->
@@ -75,11 +82,16 @@ function formatDate(date: Date) {
           return (
             <div
               class={`post-list-item relative group ${
-                index < sortedPosts.length - 1 ? "border-b border-[#2D3033]" : ""
+                index < sortedPosts.length - 1
+                  ? "border-b border-[#2D3033]"
+                  : ""
               }`}
             >
               <h3 class="list-item-title">
-                <a href={`/articles/${post.id}`} class="after:absolute after:inset-0 after:z-0">
+                <a
+                  href={`/articles/${post.id}`}
+                  class="after:absolute after:inset-0 after:z-0"
+                >
                   {post.data.title}
                 </a>
               </h3>
@@ -90,10 +102,12 @@ function formatDate(date: Date) {
                 </span>
                 {post.data.tags &&
                   post.data.tags.map((t) => (
-                    <a 
-                      href={`/tags/${t}`} 
+                    <a
+                      href={`/tags/${t}`}
                       class={`badge-tag relative z-10 hover:text-slate-300 hover:border-slate-500 transition-colors ${
-                        t === tag ? 'text-slate-300 border-slate-500 bg-[#202020]' : ''
+                        t === tag
+                          ? "text-slate-300 border-slate-500 bg-[#202020]"
+                          : ""
                       }`}
                     >
                       {t}

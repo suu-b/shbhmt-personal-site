@@ -1,10 +1,11 @@
 {
-  "name": "otto",
+  "name": "cms",
   "version": "2.0.2",
   "description": "article editor and deployment pipeline",
   "main": "main.js",
   "scripts": {
-    "start": "electron .",
+    "build:css": "tailwindcss -i input.css -o global.css",
+    "start": "pnpm build:css && electron . --no-sandbox",
     "dist:win": "electron-builder --windows",
     "dist:linux": "electron-builder --linux",
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -28,6 +29,7 @@
   },
   "homepage": "https://github.com/suu-b/Otto#readme",
   "devDependencies": {
+    "@tailwindcss/cli": "^4.3.3",
     "electron": "^37.4.0",
     "electron-builder": "^26.0.12"
   },
