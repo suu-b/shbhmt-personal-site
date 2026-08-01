@@ -1,4 +1,4 @@
-const { app, BrowserWindow, nativeImage, ipcMain } = require('electron');
+const { app, BrowserWindow, nativeImage, ipcMain, Menu } = require('electron');
 const path = require('path');
 
 const { readFileFromGitHub, updateOnGitHub, pushToGitHub, deployToGitHub, readDirFromGitHub } = require('./gitUtil');
@@ -27,6 +27,7 @@ function createWindow() {
 }
 
 app.whenReady().then(() => {
+  Menu.setApplicationMenu(null);
   createWindow();
 });
 

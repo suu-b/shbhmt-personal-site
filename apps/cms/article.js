@@ -62,6 +62,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             document.getElementById('publishBtn').style.display = 'none';
 
             // Populate article content
+            document.getElementById('articleHeading').textContent = articleData.title;
             const descVal = articleData.desc || "";
             const descEl = document.querySelector('.article-description-text');
             if (descVal) {
@@ -140,6 +141,28 @@ document.addEventListener('DOMContentLoaded', async () => {
     });
 
     dropdownBtn?.addEventListener("click", toggleDropdown);
+
+    const newTagInput = document.getElementById("new-tag-input");
+    newTagInput?.addEventListener("keydown", (e) => {
+        if (e.key === "Enter") {
+            e.preventDefault();
+            e.stopPropagation();
+            const val = newTagInput.value.trim().toLowerCase().replace(/[^a-z0-9-]/g, "");
+            if (val) {
+                if (!allTags.includes(val)) {
+                    allTags.push(val);
+                    allTags.sort();
+                }
+                if (!selectedTags.includes(val)) {
+                    selectedTags.push(val);
+                }
+                newTagInput.value = "";
+                renderDropdownOptions();
+                renderActivePills();
+                saveToLocal();
+            }
+        }
+    });
 
     const article = document.querySelector('.article');
     const box = document.querySelector('.article .content');
@@ -276,7 +299,17 @@ document.addEventListener('DOMContentLoaded', async () => {
             document.querySelector('.metadata-edit-box').style.display = 'none';
             document.querySelector('.metadata-read-box').style.display = 'block';
 
-            document.querySelector('.article-description-text').textContent = document.querySelector('.article-description').value;
+            // Disable contenteditable on title for realistic non-editing preview
+            heading.setAttribute('contenteditable', 'false');
+
+            const descVal = document.querySelector('.article-description').value;
+            const descEl = document.querySelector('.article-description-text');
+            if (descVal) {
+                descEl.textContent = descVal;
+                descEl.style.display = 'block';
+            } else {
+                descEl.style.display = 'none';
+            }
 
             const dateVal = document.querySelector('.date').value;
             document.querySelector('.date-text').textContent = dateVal ? formatDate(new Date(dateVal)) : "";
@@ -299,6 +332,9 @@ document.addEventListener('DOMContentLoaded', async () => {
             // Switch back to edit metadata container
             document.querySelector('.metadata-edit-box').style.display = 'block';
             document.querySelector('.metadata-read-box').style.display = 'none';
+
+            // Enable contenteditable back on title
+            heading.setAttribute('contenteditable', 'true');
         }
     });
 
@@ -342,7 +378,38 @@ ${content}`;
         deployBtn.disabled = true;
 
         try {
-            await window.api.deployToGitHub(contentPath, frontmatter, commitMessage);
+            // Check if there are new tags to add to tags.json
+            let tagsJsonUpdated = false;
+            let currentTagsList = [];
+            try {
+                const rawConfig = await window.api.readFileFromGitHub('shared/config/tags.json');
+                currentTagsList = JSON.parse(rawConfig || '[]');
+            } catch (err) {
+                console.error("Failed to read tags.json from GitHub, using default list", err);
+            }
+
+            const updatedTagsList = [...currentTagsList];
+            tags.forEach(tag => {
+                const cleanTag = tag.trim().toLowerCase();
+                if (cleanTag && !updatedTagsList.includes(cleanTag)) {
+                    updatedTagsList.push(cleanTag);
+                    tagsJsonUpdated = true;
+                }
+            });
+
+            if (tagsJsonUpdated) {
+                updatedTagsList.sort();
+                const filesToCommit = [
+                    { path: contentPath, content: frontmatter },
+                    { path: 'shared/config/tags.json', content: JSON.stringify(updatedTagsList, null, 2) }
+                ];
+                // In main/preload, path is passed as the first parameter, content as the second.
+                // For multi-file arrays, we pass the filesToCommit array as the first parameter and null as the second.
+                await window.api.deployToGitHub(filesToCommit, null, commitMessage);
+            } else {
+                await window.api.deployToGitHub(contentPath, frontmatter, commitMessage);
+            }
+
             console.log("Deployed successfully!");
             showNotification("Deployed Successfully :D", "success");
             localStorage.removeItem('ottoDraft');
@@ -399,10 +466,16 @@ ${content}`;
         try {
             const rawConfig = await window.api.readFileFromGitHub('shared/config/tags.json');
             allTags = JSON.parse(rawConfig || '[]');
+            if (!Array.isArray(allTags) || allTags.length === 0) {
+                allTags = ["becoming", "cerebrum", "humanities", "meditation"];
+            }
             renderDropdownOptions();
             renderActivePills();
         } catch (error) {
             console.error("Failed to load tag recommendations:", error);
+            allTags = ["becoming", "cerebrum", "humanities", "meditation"];
+            renderDropdownOptions();
+            renderActivePills();
         }
     }
 

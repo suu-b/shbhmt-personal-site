@@ -1,14 +1,10 @@
 ---
 import { getCollection } from "astro:content";
 import BaseLayout from "../layouts/BaseLayout.astro";
+import allTags from "../../../../shared/config/tags.json";
 
 const posts = await getCollection("articles");
 const activePosts = posts.filter((p) => !p.data.draft);
-
-// Get all unique tags across all articles to populate the filter dropdown
-const allTags = [
-  ...new Set(activePosts.flatMap((post) => post.data.tags || [])),
-].sort();
 
 function formatDate(date: Date) {
   const day = date.getDate();

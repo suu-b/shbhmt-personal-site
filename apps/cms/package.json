@@ -1,7 +1,7 @@
 {
   "name": "cms",
   "version": "2.0.2",
-  "description": "article editor and deployment pipeline",
+  "description": "Otto - CMS for my personal site",
   "main": "main.js",
   "scripts": {
     "build:css": "tailwindcss -i input.css -o global.css",
@@ -12,7 +12,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/suu-b/Otto.git"
+    "url": "git+https://github.com/suu-b/Preface"
   },
   "keywords": [
     "git",
@@ -49,14 +49,14 @@
     ],
     "win": {
       "target": "nsis",
-      "icon": "assets/otto.png"
+      "icon": "assets/otto-logo.png"
     },
     "linux": {
       "target": [
         "AppImage",
         "deb"
       ],
-      "icon": "assets/otto.png"
+      "icon": "assets/otto-logo.png"
     }
   }
 }

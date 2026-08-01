@@ -138,12 +138,32 @@ const deployToGitHub = async (contentPath, content, message) => {
         const baseCommitSha = latestCommit.sha;
         
         const treeItems = [];
-        treeItems.push({
-            path: contentPath,
-            mode: '100644',
-            type: 'blob',
-            content: content 
-        });
+        if (Array.isArray(contentPath)) {
+            contentPath.forEach(file => {
+                if (file.delete) {
+                    treeItems.push({
+                        path: file.path,
+                        mode: '100644',
+                        type: 'blob',
+                        sha: null
+                    });
+                } else {
+                    treeItems.push({
+                        path: file.path,
+                        mode: '100644',
+                        type: 'blob',
+                        content: file.content 
+                    });
+                }
+            });
+        } else {
+            treeItems.push({
+                path: contentPath,
+                mode: '100644',
+                type: 'blob',
+                content: content 
+            });
+        }
         
         const { data: newTree } = await octokit.git.createTree({
             owner,

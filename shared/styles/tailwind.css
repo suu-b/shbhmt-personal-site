@@ -8,6 +8,42 @@
   @apply w-full sm:w-auto flex justify-center items-center px-4 py-2 border border-slate-700 rounded-lg bg-transparent text-slate-300 hover:bg-[#202020] hover:text-slate-100 transition-colors text-lg font-medium font-serif whitespace-nowrap;
 }
 
+@utility btn-danger {
+  @apply w-full sm:w-auto flex justify-center items-center px-4 py-2 border border-red-800 rounded-lg bg-red-950/40 text-red-400 hover:bg-red-900/50 hover:text-red-200 transition-colors text-lg font-medium font-serif whitespace-nowrap hover:cursor-pointer;
+}
+
+@utility custom-checkbox {
+  appearance: none;
+  width: 1.25rem;
+  height: 1.25rem;
+  border-radius: 0.25rem;
+  border: 1px solid #2D3033;
+  background-color: #161616;
+  cursor: pointer;
+  position: relative;
+  z-index: 20;
+  transition: all 0.2s ease-in-out;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  &:hover {
+    border-color: #9CA3AF;
+  }
+
+  &:checked {
+    background-color: #CBD5E1;
+    border-color: #CBD5E1;
+  }
+
+  &:checked::after {
+    content: "✓";
+    color: #101010;
+    font-size: 0.75rem;
+    font-weight: bold;
+  }
+}
+
 @utility search-input {
   @apply w-full pl-10 pr-4 py-2 border border-[#2D3033] rounded-lg bg-[#161616] text-slate-300 text-lg focus:outline-none focus:border-slate-500 transition-colors;
 }
@@ -33,7 +69,11 @@
 }
 
 @utility link-back {
-  @apply text-sm text-slate-500 hover:text-slate-300 transition-colors flex items-center gap-1.5;
+  @apply text-lg text-slate-500 hover:text-slate-300 transition-colors flex items-center gap-1.5 no-underline hover:no-underline;
+  & svg {
+    width: 1.25rem;
+    height: 1.25rem;
+  }
 }
 
 @utility card-image-cover {

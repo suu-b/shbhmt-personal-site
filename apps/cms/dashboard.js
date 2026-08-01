@@ -177,12 +177,13 @@ document.addEventListener('DOMContentLoaded', async () => {
 
             filtered.forEach(item => {
                 const itemDiv = document.createElement("div");
-                itemDiv.className = "post-list-item relative group border-b border-[#2D3033] last:border-0 py-6";
+                itemDiv.className = "post-list-item relative group border-b border-[#2D3033] last:border-0 py-6 flex items-start gap-4";
                 
                 // Clicking anywhere on the item opens it for viewing/editing
                 itemDiv.onclick = async (e) => {
-                    // Prevent navigation click if clicking on a tag badge
+                    // Prevent navigation click if clicking on a tag badge or checkbox
                     if (e.target.closest('.select-tag-badge')) return;
+                    if (e.target.closest('.article-checkbox')) return;
 
                     const selectedArticleData = {
                         path: item.path,
@@ -205,17 +206,22 @@ document.addEventListener('DOMContentLoaded', async () => {
                 const draftBadge = item.draft ? `<span class="badge-tag border-amber-500/50 text-amber-500 bg-amber-950/20 text-[10px] uppercase font-bold tracking-wider relative z-10">Draft</span>` : "";
 
                 itemDiv.innerHTML = `
-                    <h3 class="list-item-title">
-                        <a href="#" class="after:absolute after:inset-0 after:z-0 cursor-pointer" onclick="event.preventDefault();">
-                            ${item.title}
-                        </a>
-                    </h3>
-                    <p class="list-item-desc">${item.description || "No description provided."}</p>
-                    <div class="list-item-meta flex items-center gap-3 mt-4">
-                        <span class="text-sm text-slate-500">${formatDate(new Date(item.date))}</span>
-                        ${draftBadge}
-                        <div class="flex items-center gap-1.5">
-                            ${tagsHtml}
+                    <div class="flex items-center pt-1">
+                        <input type="checkbox" class="custom-checkbox article-checkbox" data-path="${item.path}" />
+                    </div>
+                    <div class="flex-1">
+                        <h3 class="list-item-title">
+                            <a href="#" class="after:absolute after:inset-0 after:z-0 cursor-pointer" onclick="event.preventDefault();">
+                                ${item.title}
+                            </a>
+                        </h3>
+                        <p class="list-item-desc">${item.description || "No description provided."}</p>
+                        <div class="list-item-meta flex items-center gap-3 mt-4">
+                            <span class="text-sm text-slate-500">${formatDate(new Date(item.date))}</span>
+                            ${draftBadge}
+                            <div class="flex items-center gap-1.5">
+                                ${tagsHtml}
+                            </div>
                         </div>
                     </div>
                 `;
@@ -229,6 +235,15 @@ document.addEventListener('DOMContentLoaded', async () => {
                         if (tag) addTagFilter(tag);
                     };
                 });
+
+                // Add checkbox change listener
+                const checkbox = itemDiv.querySelector('.article-checkbox');
+                if (checkbox) {
+                    checkbox.onchange = (e) => {
+                        e.stopPropagation();
+                        updateDeleteSelectedBtn();
+                    };
+                }
 
                 articlesList.appendChild(itemDiv);
             });
@@ -392,7 +407,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             // Save raw data to localStorage
             localStorage.setItem('otto_cached_articles', JSON.stringify(articles));
 
-            allTags = [...new Set(articles.flatMap(post => post.tags || []))].sort();
+            allTags = await fetchTagsList();
 
             renderDropdownOptions();
             renderArticlesList();
@@ -407,6 +422,66 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
     }
 
+    async function fetchTagsList() {
+        try {
+            const rawConfig = await window.api.readFileFromGitHub('shared/config/tags.json');
+            return JSON.parse(rawConfig || '[]');
+        } catch (err) {
+            console.error("Failed to read tags.json, falling back to dynamic aggregation", err);
+            return [...new Set(articles.flatMap(post => post.tags || []))].sort();
+        }
+    }
+
+    const deleteSelectedBtn = document.getElementById("delete-selected-btn");
+
+    function updateDeleteSelectedBtn() {
+        if (!deleteSelectedBtn) return;
+        const checkedCount = document.querySelectorAll(".article-checkbox:checked").length;
+        if (checkedCount > 0) {
+            deleteSelectedBtn.textContent = `Delete Selected (${checkedCount})`;
+            deleteSelectedBtn.classList.remove("hidden");
+        } else {
+            deleteSelectedBtn.classList.add("hidden");
+        }
+    }
+
+    deleteSelectedBtn?.addEventListener("click", async () => {
+        const selectedCheckboxes = document.querySelectorAll('.article-checkbox:checked');
+        const count = selectedCheckboxes.length;
+        if (count === 0) return;
+
+        const confirmDelete = confirm(`Are you sure you want to delete the ${count} selected article(s)? This action will delete these files on GitHub and cannot be undone.`);
+        if (!confirmDelete) return;
+
+        deleteSelectedBtn.textContent = "Deleting...";
+        deleteSelectedBtn.disabled = true;
+
+        try {
+            const filesToCommit = Array.from(selectedCheckboxes).map(cb => ({
+                path: cb.getAttribute('data-path'),
+                delete: true
+            }));
+
+            const commitMessage = `OTTO Commit: Deleted ${count} selected articles`;
+            await window.api.deployToGitHub(filesToCommit, null, commitMessage);
+
+            // Clear local storage cache so it re-fetches
+            localStorage.removeItem('otto_cached_articles');
+
+            // Reload list from GitHub
+            articles = [];
+            await fetchArticlesFromGitHub();
+
+            alert(`Successfully deleted ${count} article(s) :D`);
+        } catch (err) {
+            console.error("Failed to delete selected articles:", err);
+            alert("Failed to delete selected articles. Please check console/logs.");
+        } finally {
+            deleteSelectedBtn.disabled = false;
+            updateDeleteSelectedBtn();
+        }
+    });
+
     refreshBtn?.addEventListener("click", fetchArticlesFromGitHub);
 
     // Initial Load - Check cache first
@@ -418,9 +493,11 @@ document.addEventListener('DOMContentLoaded', async () => {
             articles.forEach(item => {
                 item.date = item.date ? new Date(item.date) : new Date();
             });
-            allTags = [...new Set(articles.flatMap(post => post.tags || []))].sort();
-            renderDropdownOptions();
-            renderArticlesList();
+            fetchTagsList().then(tags => {
+                allTags = tags;
+                renderDropdownOptions();
+                renderArticlesList();
+            });
         } catch (err) {
             console.error("Failed to parse cached articles", err);
             fetchArticlesFromGitHub();
