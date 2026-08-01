@@ -7,37 +7,114 @@
     <title>Otto | Dashboard</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400..700;1,400..700&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400..700;1,400..700&display=swap"
+        rel="stylesheet" />
     <link rel="stylesheet" href="global.css">
 </head>
 
 <body class="app" id="dashboard">
-    <div class="heading-create-box">
-        <h1>Dashboard</h1>
-        <div>
-            <button class="secondary back-btn" style="margin-bottom: 10px;">Back</button>
-            <button id="create-btn">Create +</button>
-        </div>        
-    </div>
-    <p>Dashboard contains list of all the deployed articles. One can view the deployed ones or can create a new one using the button given here.</p>
-    <div class="search-box">
-        <input id="search" placeholder="Search by title"/>
-        <button id="search-btn" class="primary">Search</button>
-    </div>
-    <select id="categoryFilter" class="category">
-        <option value="">All categories</option>
-        <option value="cerebrum">Cerebrum</option>
-        <option value="meditation">Meditation</option>
-        <option value="humanities">Humanities</option>
-        <option value="becoming">Becoming</option>
-    </select>
+    <section class="w-full my-12">
+        <!-- Back Link -->
+        <a class="link-back mb-8 back-btn text-lg" style="cursor: pointer;">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                stroke="currentColor" class="w-4 h-4">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+            </svg>
+            Back
+        </a>
 
-    <div class="items-container">
-        <div style="text-align: center;">Loading...</div>
-    </div>
+        <!-- Header -->
+        <div class="mb-8 flex items-center justify-between">
+            <h2 class="text-3xl text-slate-200 font-semibold">Dashboard</h2>
+            <div class="flex items-center gap-3">
+                <button id="delete-selected-btn" class="btn-danger hidden">Delete Selected</button>
+                <button id="refresh-btn" class="btn-secondary flex items-center gap-1.5">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2"
+                        stroke="currentColor" class="w-4 h-4" id="refresh-icon">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0013.803-3.7M4.031 9.865a8.25 8.25 0 0113.803-3.7l3.181 3.182m0-4.991v4.99" />
+                    </svg>
+                    Refresh
+                </button>
+                <button id="create-btn" class="btn-primary">Create +</button>
+            </div>
+        </div>
+
+        <!-- Filter Control Bar -->
+        <div
+            class="mb-6 flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between border-b border-[#2D3033] pb-6">
+            <!-- Left side: Text Search Input Group -->
+            <div class="flex items-center gap-2 w-full sm:w-72">
+                <input type="text" id="article-search-input" placeholder="Search articles..."
+                    class="search-input !pl-4" />
+            </div>
+
+            <!-- Right side: Dropdown & Sort Button Group -->
+            <div class="flex flex-col sm:flex-row gap-3 w-full sm:w-auto z-30">
+                <!-- Tags Select Dropdown -->
+                <div class="relative inline-block text-left w-full sm:w-auto">
+                    <button id="tag-dropdown-btn"
+                        class="btn-secondary w-full sm:w-auto flex items-center justify-between gap-1.5 whitespace-nowrap">
+                        <span>Filter by Tags</span>
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5"
+                            stroke="currentColor" class="w-3.5 h-3.5 transition-transform duration-200"
+                            id="dropdown-chevron">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5"></path>
+                        </svg>
+                    </button>
+
+                    <div id="tag-dropdown-menu"
+                        class="hidden absolute right-0 sm:left-auto mt-2 w-full sm:w-64 rounded-md bg-[#161616] border border-[#2D3033] shadow-lg focus:outline-none p-2">
+                        <div class="border-b border-[#2D3033] pb-2 mb-1">
+                            <input type="text" id="tag-search-input" placeholder="Search tags..."
+                                class="w-full px-3 py-2 text-lg rounded bg-[#202020] border border-[#2D3033] text-slate-200 placeholder-slate-500 focus:outline-none focus:border-slate-500" />
+                        </div>
+                        <div class="py-1 max-h-60 overflow-y-auto" id="tag-dropdown-options" role="menu">
+                            <!-- Dynamically populated tags -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Chronological Sort Toggle -->
+                <button id="sort-btn"
+                    class="btn-secondary w-full sm:w-auto flex items-center justify-center gap-2 whitespace-nowrap"
+                    data-sort="desc">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                        stroke="currentColor" class="w-4 h-4 transition-transform duration-300" id="sort-icon">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M3 4.5h14.25M3 9h9.75M3 13.5h5.25m5.25-.75L17.25 9m0 0L21 12.75M17.25 9v10.5"></path>
+                    </svg>
+                    <span id="sort-btn-text">Newest First</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Selected Active Tags Row -->
+        <div id="active-tags-container" class="flex flex-wrap gap-2 mb-6 hidden">
+            <!-- Active tag pills will be dynamically generated here -->
+        </div>
+
+        <!-- Empty State -->
+        <div id="empty-state" class="hidden text-center py-20 border border-dashed border-[#2D3033] rounded-lg">
+            <p class="text-lg text-slate-500 font-light">
+                No articles match your selected filters.
+            </p>
+            <button id="clear-filters-btn"
+                class="mt-4 text-sm underline text-slate-400 hover:text-slate-200 transition-colors">
+                Clear all filters
+            </button>
+        </div>
+
+        <!-- Articles List Container -->
+        <div id="articles-list" class="flex flex-col">
+            <div style="text-align: center; color: var(--muted); padding: 40px 0;">Loading articles...</div>
+        </div>
+    </section>
+
     <script>
         document.getElementById('create-btn').onclick = async () => {
             await window.state.set('mode', 'write');
+            await window.state.set('selectedArticleData', null);
             window.nav.go('article.html');
         };
         document.querySelector('.back-btn').onclick = () => {

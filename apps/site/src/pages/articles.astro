@@ -1,14 +1,10 @@
 ---
 import { getCollection } from "astro:content";
 import BaseLayout from "../layouts/BaseLayout.astro";
+import allTags from "../../../../shared/config/tags.json";
 
 const posts = await getCollection("articles");
 const activePosts = posts.filter((p) => !p.data.draft);
-
-// Get all unique tags across all articles to populate the filter dropdown
-const allTags = [
-  ...new Set(activePosts.flatMap((post) => post.data.tags || [])),
-].sort();
 
 function formatDate(date: Date) {
   const day = date.getDate();
@@ -31,7 +27,7 @@ function formatDate(date: Date) {
 <BaseLayout title="Articles">
   <section class="w-full my-12">
     <!-- Back to Preface Link -->
-    <a href="/" class="link-back mb-8">
+    <a href="/" class="link-back mb-8 text-lg">
       <svg
         xmlns="http://www.w3.org/2000/svg"
         fill="none"
@@ -45,7 +41,7 @@ function formatDate(date: Date) {
           stroke-linejoin="round"
           d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
       </svg>
-      Back to preface
+      Back
     </a>
 
     <!-- Header -->

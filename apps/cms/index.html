@@ -1,27 +1,31 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Otto | Home</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400..700;1,400..700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400..700;1,400..700&display=swap"
+    rel="stylesheet" />
   <link rel="stylesheet" href="global.css">
 </head>
-<body>
-    <div class="app" id="landing-page">
-      <div id="landing-page-box">
-        <img src="./assets/otto.png" alt="otto-gazes-at-you">
-        <h1>Otto</h1>
-        <p>Content Management Service and Deployment Pipeline</p>
-        <button id="dashboard-btn">Get Started</button>
-      </div>      
-    </div>
-    <script>
-      document.getElementById('dashboard-btn').onclick = () => {
-          window.nav.go('dashboard.html');
-        };
-    </script>
+
+<body id="landing-body">
+  <div id="landing-page-box" class="flex flex-col items-center">
+    <img src="./assets/otto-logo.png" alt="Otto Logo">
+    <h1 class="mb-2">Otto</h1>
+    <p class="text-lg text-slate-400 font-light mb-6 leading-relaxed max-w-xs mx-auto">
+      Content Management Service
+    </p>
+    <button id="dashboard-btn" class="btn-primary">Get Started</button>
+  </div>
+  <script>
+    document.getElementById('dashboard-btn').onclick = () => {
+      window.nav.go('dashboard.html');
+    };
+  </script>
 </body>
+
 </html>

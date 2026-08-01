@@ -6,64 +6,110 @@
     <title>Otto | New Article</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400..700;1,400..700&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400..700;1,400..700&display=swap"
+        rel="stylesheet" />
     <link rel="stylesheet" href="global.css">
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/dompurify@2.4.0/dist/purify.min.js"></script>
 </head>
 
 <body class="app">
-        <section class="article">
-            <div class="button-group">
-                <button class="secondary back-btn">Back</button>
-                <button class="secondary" id="previewBtn">Preview</button>
-                <button class="secondary" id="saveBtn">Save</button>
-                <button class="primary" id="publishBtn">Publish</button>
-            </div>
-            <div id="articleHeading" class="article-heading editable" contenteditable="true" role="textbox" aria-multiline="true"
-                data-placeholder="Title"></div>        
-            <input type="hidden" name="title" id="titleInput" />
-            <input class="article-description" placeholder="Description" />
-            <div class="article-top-box">
+    <section class="article">
+        <div class="button-group flex items-center gap-4 mb-8">
+            <a class="link-back back-btn text-lg"
+                style="cursor: pointer;">
+                <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+                </svg>
+                Back
+            </a>
+            <button class="btn-secondary" id="previewBtn">Preview</button>
+            <button class="btn-secondary" id="saveBtn">Save</button>
+            <button class="btn-primary" id="publishBtn">Publish</button>
+        </div>
+
+        <h1 id="articleHeading"
+            class="article-heading editable text-3xl md:text-4xl text-slate-200 font-bold mb-3 leading-tight"
+            contenteditable="true" role="textbox" aria-multiline="true" data-placeholder="Title"></h1>
+        <input type="hidden" name="title" id="titleInput" />
+
+        <!-- Edit metadata block (hidden in read-only mode) -->
+        <div class="metadata-edit-box">
+            <input class="article-description search-input !pl-4 font-serif py-2 text-lg mb-4"
+                placeholder="Description" />
+            <div class="article-top-box flex items-center gap-4">
                 <p class="date"></p>
-                <p class="sep" style="margin-right: 10px; margin-left: 10px;">|</p>
-                <select class="category">
-                    <option value="" selected disabled>Category</option>
-                    <option value="becoming">becoming</option>
-                    <option value="humanities">humanities</option>
-                    <option value="cerebrum">cerebrum</option>
-                    <option value="meditation">meditation</option>
-                </select>
+                <p class="sep">|</p>
+                <div class="tags-dropdown-wrapper flex flex-wrap items-center gap-3" style="flex: 1;">
+                    <!-- Tags Select Dropdown -->
+                    <div class="relative inline-block text-left" id="article-tag-dropdown-container">
+                        <button type="button" id="article-tag-dropdown-btn"
+                            class="btn-secondary flex items-center justify-between gap-1.5 whitespace-nowrap">
+                            <span>Add Tags</span>
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5"
+                                stroke="currentColor" class="w-3.5 h-3.5 transition-transform duration-200"
+                                id="article-dropdown-chevron">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5">
+                                </path>
+                            </svg>
+                        </button>
+
+                        <div id="article-tag-dropdown-menu"
+                            class="hidden absolute left-0 mt-2 w-64 rounded-md bg-[#161616] border border-[#2D3033] shadow-lg focus:outline-none p-2 z-30">
+                            <div class="border-b border-[#2D3033] pb-2 mb-1">
+                                <input
+                                    type="text"
+                                    id="new-tag-input"
+                                    placeholder="Add custom tag..."
+                                    class="w-full px-3 py-1.5 text-sm rounded bg-[#202020] border border-[#2D3033] text-slate-200 placeholder-slate-500 focus:outline-none focus:border-slate-500 font-serif"
+                                />
+                            </div>
+                            <div class="py-1 max-h-60 overflow-y-auto" id="article-tag-dropdown-options" role="menu">
+                                <!-- Dynamically populated -->
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Active Tag Pills -->
+                    <div id="article-active-tags-pills" class="flex flex-wrap gap-2"></div>
+                </div>
             </div>
-            <div class="thumbnail"></div>
+        </div>
+
+        <!-- Read-only metadata block (hidden in write/edit mode) -->
+        <div class="metadata-read-box mb-6" style="display: none;">
+            <p class="article-description-text mt-2 mb-4 text-lg text-slate-400 font-light italic leading-relaxed"></p>
+            <div class="flex items-center gap-4 text-sm text-slate-500">
+                <time class="date-text"></time>
+                <div class="article-tags-container flex items-center gap-2"></div>
             </div>
-            <textarea spellcheck="false" class="content"></textarea>
-        </section>
-        <section class="dialog">
-            <h2>Send it off!</h2>
-            <p>Pushing deploy will hit the git service to deploy the article live on The Site.</p>
-            <input class="thumbnail-src" placeholder="Thumbnail source link" />
-            <input class="thumbnail-credits" placeholder="Credits" />
-            <div class="dialog-btns">
-                <button class="primary" id="deployBtn">Deploy</button>
-                <button class="secondary" id="cancelBtn">Cancel</button>
-            </div>
-            <p id="error"></p>
-        </section>
-        <script src="article.js"></script>
-        <script>
-            window.MathJax = {
-                tex: {
-                    inlineMath: [["$", "$"], ["\\(", "\\)"]],
-                    displayMath: [["$$", "$$"], ["\\[", "\\]"]],
-                },
-                svg: { fontCache: "global" }
-            };
-            document.querySelector('.back-btn').onclick = () => {
-                window.nav.go('dashboard.html');
-            };
-        </script>
-        <script async id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+        </div>
+
+        <textarea spellcheck="false" class="content"></textarea>
+    </section>
+    <section class="dialog">
+        <h2>Send it off!</h2>
+        <p>Pushing deploy will hit the git service to deploy the article live on The Site.</p>
+        <div class="dialog-btns flex gap-4 mt-6">
+            <button class="btn-primary" id="deployBtn">Deploy</button>
+            <button class="btn-secondary" id="cancelBtn">Cancel</button>
+        </div>
+        <p id="error"></p>
+    </section>
+    <script src="article.js"></script>
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [["$", "$"], ["\\(", "\\)"]],
+                displayMath: [["$$", "$$"], ["\\[", "\\]"]],
+            },
+            svg: { fontCache: "global" }
+        };
+        document.querySelector('.back-btn').onclick = () => {
+            window.nav.go('dashboard.html');
+        };
+    </script>
+    <script async id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 </body>
 
 </html>

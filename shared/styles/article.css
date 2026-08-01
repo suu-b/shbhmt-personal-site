@@ -6,7 +6,6 @@
     margin: 0 auto;
 }
 
-.article a,
 .article-content a {
     text-decoration: underline;
     text-decoration-style: dotted;

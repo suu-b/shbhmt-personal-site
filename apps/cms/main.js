@@ -1,7 +1,7 @@
-const { app, BrowserWindow, nativeImage, ipcMain } = require('electron');
+const { app, BrowserWindow, nativeImage, ipcMain, Menu } = require('electron');
 const path = require('path');
 
-const { readFileFromGitHub, updateOnGitHub, pushToGitHub, deployToGitHub } = require('./gitUtil');
+const { readFileFromGitHub, updateOnGitHub, pushToGitHub, deployToGitHub, readDirFromGitHub } = require('./gitUtil');
 
 let win;
 let globalState = {}
@@ -13,24 +13,30 @@ function createWindow() {
     width: 1000,
     height: 700,
     show: false,
-    icon, 
+    icon,
     webPreferences: {
       preload: path.join(__dirname, 'preload.js')
     }
   });
+
   if (process.platform === 'linux') {
-    app.dock?.setIcon(icon); 
+    app.dock?.setIcon(icon);
   }
   win.maximize();
   win.loadFile('index.html');
 }
 
 app.whenReady().then(() => {
+  Menu.setApplicationMenu(null);
   createWindow();
 });
 
 ipcMain.handle('read-from-github', async (event, { path }) => {
   return readFileFromGitHub(path);
+});
+
+ipcMain.handle('read-dir-from-github', async (event, { path }) => {
+  return readDirFromGitHub(path);
 });
 
 ipcMain.handle('update-on-github', async (event, { path, message, content }) => {
@@ -41,8 +47,8 @@ ipcMain.handle('push-to-github', async (event, { path, message, content }) => {
   return pushToGitHub(path, message, content);
 });
 
-ipcMain.handle('deploy-to-github', async (event, { contentPath, indexPath, content, indexContent, message }) => {
-  return deployToGitHub(contentPath, indexPath, content, indexContent, message);
+ipcMain.handle('deploy-to-github', async (event, { contentPath, content, message }) => {
+  return deployToGitHub(contentPath, content, message);
 });
 
 ipcMain.on('navigate', (event, target) => {
