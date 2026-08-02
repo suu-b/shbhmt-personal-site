@@ -1,0 +1,56 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { Image } from "astro:assets";
+import profileImg from "../../public/assets/profile.jpg";
+---
+
+<BaseLayout title="Personal Statement | Shubham Thakur">
+  <div class="max-w-3xl mx-auto my-12 font-serif px-4">
+    <div class="mb-10">
+      <a href="/" class="link-back"> ← Back </a>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12 items-start">
+      <div class="md:col-span-2 order-2 md:order-1">
+        <p class="text-slate-300 text-lg leading-relaxed text-justify mb-5">
+          Hi, I'm Shubham. Currently, I am a final year CS Undergrad student. I
+          love to spend my time thinking about, understanding, and working on
+          systems. In addition to this, I fancy literature, art, and music.
+          Within me, I carry a whim to become a Poet as well.
+        </p>
+
+        <p class="text-slate-300 text-lg leading-relaxed text-justify mb-8">
+          Since childhood, I've found myself drawn towards a huge array of
+          things. Lately, it has began to come sense out of all this chaos — I
+          have realized that I want to be a polymath. Consequently, produce
+          something of personal and societal meaning. For now, I want to deepen
+          my knowledge of building intelligent, reliable, and secure systems.
+          This is for the reason that computer science has become a bedrock of
+          every modern change and a deep expertise in building CS solutions is
+          of paramount importance.
+        </p>
+
+        <div>
+          <a
+            href="/assets/shbhmt.pdf"
+            class="btn btn-secondary inline-block text-base"
+            target="_blank"
+            download
+          >
+            See Curriculum Vitae
+          </a>
+        </div>
+      </div>
+
+      <div
+        class="md:col-span-1 order-1 md:order-2 flex justify-center md:justify-end"
+      >
+        <Image
+          src={profileImg}
+          alt="Shubham Thakur"
+          class="w-64 h-64 rounded-lg object-cover border border-[#2D3033]"
+        />
+      </div>
+    </div>
+  </div>
+</BaseLayout>

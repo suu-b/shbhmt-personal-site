@@ -1,5 +1,8 @@
 ---
 import "../styles/global.css";
+import Footer from "../components/Footer.astro";
+import { Image } from "astro:assets";
+import borderImg from "../../public/assets/border.png";
 
 interface Props {
   title: string;
@@ -52,6 +55,12 @@ const {
   <body class="text-xl text-slate-300">
     <main class="layout-container">
       <slot />
+      <Image
+        src={borderImg}
+        alt="divider border"
+        class="w-[40%] my-5 mx-auto"
+      />
+      <Footer />
     </main>
 
     <script>

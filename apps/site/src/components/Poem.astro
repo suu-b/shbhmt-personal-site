@@ -1,5 +1,6 @@
 ---
-
+import { Image } from "astro:assets";
+import birdImg from "../../public/assets/bird.jpg";
 ---
 
 <section id="poem" class="card-poem">
@@ -17,8 +18,8 @@
                     >Emily Dickinson</a
                 >
             </p>
-            <img
-                src="/assets/bird.jpg"
+            <Image
+                src={birdImg}
                 alt="Emily Dickinson's poem illustration"
                 class="avatar-circular mt-6"
             />

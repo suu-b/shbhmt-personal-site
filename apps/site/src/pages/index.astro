@@ -5,30 +5,24 @@ import Contents from "../components/Contents.astro";
 import FeaturedPost from "../components/FeaturedPost.astro";
 import RecentPosts from "../components/RecentPosts.astro";
 import Poem from "../components/Poem.astro";
+import Links from "../components/Links.astro";
+import { Image } from "astro:assets";
+import borderImg from "../../public/assets/border.png";
 ---
 
-<BaseLayout title="Preface">
+<BaseLayout title="Shubham Thakur | Preface">
 	<Introduction />
 	<Contents />
-	<img
-		src="/assets/border.png"
-		alt="divider border"
-		class="w-[40%] my-5 mx-auto"
-	/>
+	<Image src={borderImg} alt="divider border" class="w-[40%] my-5 mx-auto" />
 
 	<FeaturedPost />
-	<img
-		src="/assets/border.png"
-		alt="divider border"
-		class="w-[40%] my-5 mx-auto"
-	/>
+	<Image src={borderImg} alt="divider border" class="w-[40%] my-5 mx-auto" />
 
 	<RecentPosts />
-	<img
-		src="/assets/border.png"
-		alt="divider border"
-		class="w-[40%] my-5 mx-auto"
-	/>
+	<Image src={borderImg} alt="divider border" class="w-[40%] my-5 mx-auto" />
+
+	<Links />
+	<Image src={borderImg} alt="divider border" class="w-[40%] my-5 mx-auto" />
 
 	<h1 class="text-center text-2xl mb-5">A Beloved Poem</h1>
 	<Poem />
