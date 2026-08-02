@@ -6,8 +6,8 @@
   "scripts": {
     "build:css": "tailwindcss -i input.css -o global.css",
     "start": "pnpm build:css && electron . --no-sandbox",
-    "dist:win": "electron-builder --windows",
-    "dist:linux": "electron-builder --linux",
+    "dist:win": "pnpm build:css && electron-builder --windows",
+    "dist:linux": "pnpm build:css && electron-builder --linux",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
