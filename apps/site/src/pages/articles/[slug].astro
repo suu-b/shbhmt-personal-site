@@ -14,11 +14,7 @@ const { article } = Astro.props;
 const { Content } = await render(article);
 ---
 
-<BaseLayout 
-  title={article.data.title} 
-  description={article.data.description}
-  ogImage={article.data.ogImage || "/assets/og_banner.png"}
->
+<BaseLayout title={article.data.title} description={article.data.description}>
   <article class="article">
     <header class="mb-8">
       <a
