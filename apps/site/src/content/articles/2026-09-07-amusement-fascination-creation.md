@@ -2,7 +2,7 @@
 title: "Amusement; Fascination; Creation"
 description: "A reflection of my aspirations as they have grown through these four years"
 date: 2026-09-07
-tags: ["aspirations","dsa","computer-science","problem-solving","reflection"]
+tags: ["dsa","computer-science","reflection"]
 draft: false
 ---
 
