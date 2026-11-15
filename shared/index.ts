@@ -1,3 +1,4 @@
 import { articleSchema } from "./schemas/article";
+import { projectSchema } from "./schemas/project";
 
-export { articleSchema };
+export { articleSchema, projectSchema };
