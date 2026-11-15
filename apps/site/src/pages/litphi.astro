@@ -1,0 +1,35 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Thumbnail from "../components/Thumbnail.astro";
+import bg from "../../public/assets/litphi_bg.png";
+---
+
+<BaseLayout title="Literature and Philosophy | Shubham Thakur">
+  <section class="w-full my-12 font-serif">
+    <!-- Back Link -->
+    <a href="/" class="link-back mb-8">
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke-width="1.5"
+        stroke="currentColor"
+        class="w-4 h-4"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+      </svg>
+      Back
+    </a>
+
+    <Thumbnail
+        src={bg}
+        alt="A garden"
+        subtitle="Have you imagined yourself inside a lonely cottage deep inside woods on a rainy day, sitting in front of a fireplace sipping some warm tea in your own world with butterflies flying around your head? Or instead looking within .. feeling something powerful? Or even having a sort of  breakdown. Being hurt. Just crying because someone finally saw you! No matter how far in the past. This is English Literature and Philosophy for me."/>
+    <h1 class="text-3xl text-slate-200 font-bold mb-6">English Literature and Philosophy</h1>
+    
+    <p>Coming Soon...</p>
+  </section>
+</BaseLayout>

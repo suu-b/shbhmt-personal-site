@@ -1,5 +1,22 @@
 ---
+import { getCollection } from "astro:content";
 import BaseLayout from "../layouts/BaseLayout.astro";
+
+const giants = await getCollection("giants");
+
+const allGiants = giants.flatMap(entry => {
+  const categoryGiants = entry.data as Array<{
+    name: string;
+    description: string;
+    link?: string;
+    content: string;
+  }>;
+  return categoryGiants.map(giant => ({
+    ...giant,
+    category: entry.id
+  }));
+});
+
 ---
 
 <BaseLayout title="Giants | Preface">
@@ -25,5 +42,110 @@ import BaseLayout from "../layouts/BaseLayout.astro";
 
     <h1 class="text-3xl text-slate-200 font-bold mb-6">Giants</h1>
     <p class="text-slate-400 italic mb-8">On whose shoulders I stand...</p>
+
+    <!-- <!-- Giants List
+    {allGiants.length > 0 && (
+      <div class="relative">
+        <p class="text-xl text-slate-200 font-serif">
+          {
+            allGiants.map((giant, index) => (
+              <>
+                <span
+                  class="link-dotted text-slate-200 hover:text-slate-100 giant-link cursor-pointer"
+                  data-giant-name={giant.name}
+                  data-giant-description={giant.description || ''}
+                  data-giant-content={giant.content || ''}
+                  data-giant-link={giant.link || ''}
+                >
+                  {giant.name}
+                </span>
+                {index < allGiants.length - 1 && <span>, </span>}
+              </>
+            ))
+          }
+        </p>
+      </div>
+    )} -->
+
+    <!-- Giant Popup -->
+    <div id="giant-popup" class="hidden fixed bg-[#0a0a0a] rounded-lg shadow-xl p-5 max-w-md min-w-[300px] min-h-[150px] z-50 text-slate-200">
+      <p id="popup-description" class="text-slate-400 text-lg mb-4"></p>
+      <p id="popup-content" class="leading-relaxed text-justify text-lg text-slate-300 mb-5"></p>
+      <p class="leading-relaxed text-justify text-lg text-slate-300">
+        Know more{" "} 
+        <a
+          id="popup-link"
+          href="#"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="link-dotted text-slate-300 hover:text-slate-200 transition-colors"
+        >
+          here
+        </a>
+      </p>
+    </div> 
+
+    <script is:inline>
+      document.addEventListener('DOMContentLoaded', () => {
+        const popup = document.getElementById('giant-popup');
+        const popupDescription = document.getElementById('popup-description');
+        const popupContent = document.getElementById('popup-content');
+        const popupLink = document.getElementById('popup-link');
+        const giantLinks = document.querySelectorAll('.giant-link');
+
+        let hideTimeout = null;
+
+        function showPopup(element) {
+          const description = element.getAttribute('data-giant-description');
+          const content = element.getAttribute('data-giant-content');
+          const link = element.getAttribute('data-giant-link');
+
+          if (popupDescription) popupDescription.textContent = `“${description}”`;
+          if (popupContent) popupContent.textContent = content || '';
+
+          if (popupLink) {
+            if (link) {
+              popupLink.href = link;
+              popupLink.classList.remove('hidden');
+            } else {
+              popupLink.classList.add('hidden');
+            }
+          }
+
+          const rect = element.getBoundingClientRect();
+          if (popup) {
+            popup.style.left = `${rect.left}px`;
+            popup.style.top = `${rect.bottom + 8}px`;
+            popup.classList.remove('hidden');
+          }
+
+          if (hideTimeout) {
+            clearTimeout(hideTimeout);
+            hideTimeout = null;
+          }
+        }
+
+        function hidePopup() {
+          hideTimeout = window.setTimeout(() => {
+            if (popup) popup.classList.add('hidden');
+          }, 200);
+        }
+
+        giantLinks.forEach((link) => {
+          link.addEventListener('mouseenter', () => showPopup(link));
+          link.addEventListener('mouseleave', hidePopup);
+        });
+
+        if (popup) {
+          popup.addEventListener('mouseenter', () => {
+            if (hideTimeout) {
+              clearTimeout(hideTimeout);
+              hideTimeout = null;
+            }
+          });
+          popup.addEventListener('mouseleave', hidePopup);
+        }
+      });
+    </script>
   </section>
 </BaseLayout>

@@ -1,0 +1,16 @@
+{
+  "computer-science": [
+    {
+      "name": "Martin Kleppmann",
+      "description": "Author of Designing Data-Intensive Applications",
+      "link": "https://martin.kleppmann.com/",
+      "content": "Martin Kleppmann is a computer scientist..."
+    },
+    {
+      "name": "Another Giant",
+      "description": "Another description",
+      "link": "https://example.com",
+      "content": "Their contributions..."
+    }
+  ]
+}

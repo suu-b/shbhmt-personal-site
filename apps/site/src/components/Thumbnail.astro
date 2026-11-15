@@ -1,0 +1,32 @@
+---
+import { Image } from "astro:assets";
+
+interface Props {
+  src: any;
+  alt: string;
+  subtitle: string;
+  width?: string;
+  loading?: "eager" | "lazy";
+  fetchpriority?: "high" | "low" | "auto";
+}
+
+const {
+  src,
+  alt,
+  subtitle,
+  width = "max-w-[70%]",
+  loading = "eager",
+  fetchpriority = "high",
+} = Astro.props;
+---
+
+<div class="flex w-full mb-5 p-3 justify-center sm:justify-start gap-5 flex-col sm:flex-row">
+  <Image
+    src={src}
+    alt={alt}
+    class={width}
+    loading={loading}
+    fetchpriority={fetchpriority}
+  />
+  <p class="text-base text-slate-500 hidden lg:block">{subtitle}</p>
+</div>

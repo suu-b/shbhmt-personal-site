@@ -1,0 +1,102 @@
+---
+import { getCollection, render } from "astro:content";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+
+export async function getStaticPaths() {
+  const projects = await getCollection("projects");
+  return projects.map((project) => ({
+    params: { slug: project.id },
+    props: { project },
+  }));
+}
+
+const { project } = Astro.props;
+const { Content } = await render(project);
+---
+
+<BaseLayout title={project.data.title} description={project.data.description}>
+  <article class="article">
+    <header class="mb-8 px-0 sm:px-4">
+      <a
+        href="/cs"
+        class="link-back mb-6"
+      >
+        <svg
+          class="w-4 h-4"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+          stroke-width="2"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+        </svg>
+        Back
+      </a>
+
+      {project.data.thumbnail && (
+        <div class="w-full mb-6">
+          <img
+            src={project.data.thumbnail}
+            alt={project.data.title}
+            class="w-full h-auto rounded-lg"
+          />
+        </div>
+      )}
+
+      <h1
+        class="text-3xl md:text-4xl text-slate-200 font-bold mb-3 leading-tight flex items-center gap-3 flex-wrap"
+      >
+        {project.data.title}
+        {project.data.github && (
+          <a
+            href={project.data.github}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="text-slate-500 hover:text-slate-300 transition-colors"
+            title="View external link"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              stroke-width="2"
+              class="w-6 h-6 md:w-7 md:h-7"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
+              />
+            </svg>
+          </a>
+        )}
+      </h1>
+
+      {
+        project.data.description && (
+          <p class="mt-2 mb-4 text-base sm:text-lg text-slate-400 font-light leading-relaxed">
+            {project.data.description}
+          </p>
+        )
+      }
+
+      {project.data.techStack && project.data.techStack.length > 0 && (
+        <div class="flex flex-wrap gap-2 mt-4">
+          {project.data.techStack.map((tech) => (
+            <span class="badge-tag">
+              {tech}
+            </span>
+          ))}
+        </div>
+      )}
+    </header>
+
+    <div class="article-content leading-relaxed text-justify px-0 sm:px-4">
+      <Content />
+    </div>
+  </article>
+</BaseLayout>
